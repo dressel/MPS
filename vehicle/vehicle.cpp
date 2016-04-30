@@ -6,6 +6,7 @@ Vehicle::Vehicle()
 	this->y = 5.0;
 	this->heading = 0.0;
 	this->limit = 10.0;
+	this->max_step = 2.0;
 	//BearingOnly temp = new BearingOnly();
 	//this->sensor = &temp;
 	this->sensor = new BearingOnly();

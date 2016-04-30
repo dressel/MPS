@@ -4,7 +4,6 @@ GreedyPlanner::GreedyPlanner(Vehicle x, Filter *f, int n)
 {
 	this->x = x;
 	this->filter = f;
-
 	this->n = n;
 
 	/* create vector of possible actions */
@@ -16,8 +15,8 @@ GreedyPlanner::GreedyPlanner(Vehicle x, Filter *f, int n)
 	for (i = 0; i < n; i++)
 	{
 		acts[i] = vector<float> (2);
-		acts[i][0] = 2.0 * sin(deg);
-		acts[i][1] = 2.0 * cos(deg);
+		acts[i][0] = x.max_step * sin(deg);
+		acts[i][1] = x.max_step * cos(deg);
 		deg += step;
 	}
 	acts[n] = vector<float> (2);
@@ -29,19 +28,24 @@ GreedyPlanner::GreedyPlanner(Vehicle x, Filter *f, int n)
 vector<float> GreedyPlanner::action()
 {
 	/* determine what the observation is */
-	double o;
+	//double o;
+	/*
 	if (x.sensor->type() == 0)
 		o = _bearing_max;
 	else
 		o = 45.0; //TODO: change this to the correct field from planner
+	*/
+	double o = get_obs();
 
 	/* update the belief */
 	filter->update(x, o);
 
 	/* loop through all possible actions, selecting best */
-	vector<float> best_a = find_best_action(x);
+	return find_best_action(x);
+}
 
-	return best_a;
+double get_obs()
+{
 }
 
 

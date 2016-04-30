@@ -13,7 +13,8 @@ class Vehicle
 		double x;
 		double y;
 		double heading;
-		double limit;		// limits sensor region
+		double limit;		// size of region
+		double max_step;
 		Sensor *sensor;
 
 		Vehicle();

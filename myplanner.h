@@ -10,5 +10,10 @@ class MyPlanner : public Planner
 		Vehicle x;
 		Filter *filter;
 		//virtual vector action() = 0;
+		MyPlanner();
+		double get_obs();
+		bool initialize();
+		vector<float> action();
+
 };
 #endif
