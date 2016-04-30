@@ -20,6 +20,9 @@ class DF : public Filter
 		// for right now, assume 36 bins
 		DF(double l, int n);
 		int update(Vehicle x, double o);
+		double mutual_information(Vehicle x, vector<double> xp);
+		double p_obs();
+		double p_obs(Vehicle x, double xp, double yp, double hp, int ob);
 		int obs2bin(double o, Sensor *s);
 		int obs2bin(double o, BearingOnly *s);
 		void print_belief();

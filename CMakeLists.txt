@@ -17,4 +17,7 @@ include_directories("${PROJECT_SOURCE_DIR}/bearing")
 add_subdirectory("bearing")
 add_executable(test4 circle.cpp filter/df.cpp vehicle/bearingonly.cpp vehicle/vehicle.cpp mps_math.cpp test/test4.cpp planner.cpp)
 
+add_executable(test5 greedy.cpp filter/df.cpp vehicle/bearingonly.cpp vehicle/vehicle.cpp mps_math.cpp test/test5.cpp planner.cpp)
+
 target_link_libraries(test4 BearingLib)
+target_link_libraries(test5 BearingLib)

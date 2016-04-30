@@ -7,7 +7,7 @@ class CirclePlanner : public MyPlanner
 {
 	public:
 		CirclePlanner(Vehicle x, Filter *f);
-		int get_action(double o);
+		bool initialize();
 		vector<float> action();
 		vector<float> last;
 };

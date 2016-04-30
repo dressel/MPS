@@ -10,6 +10,11 @@ CirclePlanner::CirclePlanner(Vehicle x, Filter *f)
 	this->last.push_back(0.0);
 }
 
+bool CirclePlanner::initialize()
+{
+	return true;
+}
+
 vector<float> CirclePlanner::action()
 {
 	//double o = 45.0;
@@ -29,13 +34,17 @@ vector<float> CirclePlanner::action()
 		ax = -ax;
 		ay = -ay;
 	}
-	vector<float>commands;
-	commands.push_back(10.0 * ay);
-	commands.push_back(10.0 * ax);
+	vector<float>commands (2);
+	commands[0] = 10.0 * ay;
+	commands[1] = 10.0 * ax;
 
 	// preserve current action as last to check for direction
 	last[0] = ax;
 	last[1] = ay;
+
+	// We keep track of vehicle's movement here
+	x.x += ax;
+	x.y += ay;
 
 	return commands;
 }

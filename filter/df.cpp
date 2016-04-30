@@ -39,9 +39,8 @@ int DF::update(Vehicle x, double o)
 	double cell_size = this->cell_size;
 	double bp_sum = 0.0;
 	int theta_x, theta_y;
-	double tx, ty;
+	double tx, ty, temp;
 
-	double temp;
 	for (theta_x = 0; theta_x < num_cells; theta_x++) 
 	{
 		for (theta_y = 0; theta_y < num_cells; theta_y++) 
@@ -208,4 +207,56 @@ double DF::true_bearing(double px, double py, double tx, double ty)
 	if (ang_deg < 0.0)
 		ang_deg += 360.0;
 	return ang_deg;
+}
+
+double DF::p_obs(Vehicle x, double xp, double yp, double hp, int ob)
+{
+	double prob = 0.0;
+	int theta_x, theta_y;
+	double half_cell = cell_size / 2.0;
+	double xj, yj;
+	for (theta_x = 0; theta_x < n; theta_x++)
+	{
+		for (theta_y = 0; theta_y < n; theta_y++)
+		{
+			xj = theta_x * cell_size + half_cell;
+			yj = theta_y * cell_size + half_cell;
+
+			prob += b[theta_x][theta_y] * O(xp,yp,hp,xj,yj, ob, x.sensor);
+		}
+	}
+	return prob;
+}
+double DF::mutual_information(Vehicle x, vector<double> np)
+{
+	double nh = 3.0;
+	double prob = p_obs(x, np[0], np[1], nh, 0);
+	double half_cell = cell_size / 2.0;
+
+	double H_o = 0.0;
+	double H_o_t = 0.0;
+	int ob, theta_x, theta_y;
+	double po, pot, xj, yj;
+
+	for (ob = 0; ob < 36; ob ++)
+	{
+		po = p_obs(x, np[0], np[1], nh, ob);
+		if (po > 0.0)
+			H_o -= po * log(po);
+
+		// sum over theta
+		for (theta_x = 0; theta_x < n; theta_x++)
+		{
+			for (theta_y = 0; theta_y < n; theta_y++)
+			{
+				xj = theta_x * cell_size + half_cell;
+				yj = theta_y * cell_size + half_cell;
+
+				pot = O(np[0], np[1], 0.0, xj, yj, ob, x.sensor);
+				if (pot > 0.0)
+					H_o_t -= pot * b[theta_x][theta_y] * log(pot);
+			}
+		}
+	}
+	return H_o - H_o_t;
 }
