@@ -1,4 +1,4 @@
-#include "greedy.h"
+#include "greedy_planner.h"
 
 //GreedyPlanner::GreedyPlanner(Vehicle x, Filter *f, int n)
 GreedyPlanner::GreedyPlanner(string paramfile)
