@@ -6,7 +6,8 @@
 class CirclePlanner : public MyPlanner
 {
 	public:
-		CirclePlanner(Vehicle x, Filter *f);
+		//CirclePlanner(Vehicle x, Filter *f);
+		CirclePlanner(string paramfile);
 		bool initialize();
 		vector<float> action();
 		vector<float> last;

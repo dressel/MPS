@@ -17,7 +17,10 @@ class Vehicle
 		double max_step;
 		Sensor *sensor;
 
+		//Vehicle(double limit, double max_step);
 		Vehicle();
 		vector<double> new_pose(vector<float> a);
+		void move(float ax, float ay);
+		void move(float ax, float ay, float ah);
 };
 #endif //VEHICLE_VEHICLE_H_

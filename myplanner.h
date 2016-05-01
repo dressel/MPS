@@ -1,19 +1,23 @@
 #ifndef PLANNER_H_
 #define PLANNER_H_
 
+#include <string>
+#include <fstream>
 #include "planner.h"
 #include "filter/df.h"
+
+using std::string;
+using std::ifstream;
 
 class MyPlanner : public Planner
 {
 	public:
+		MyPlanner();
 		Vehicle x;
 		Filter *filter;
-		//virtual vector action() = 0;
-		MyPlanner();
 		double get_obs();
-		bool initialize();
-		vector<float> action();
-
+		virtual bool initialize() {};
+		virtual vector<float> action() {};
+		bool read_config(string paramfile);
 };
 #endif

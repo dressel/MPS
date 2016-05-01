@@ -6,7 +6,8 @@
 class GreedyPlanner : public MyPlanner
 {
 	public:
-		GreedyPlanner(Vehicle x, Filter *f, int n);
+		//GreedyPlanner(Vehicle x, Filter *f, int n);
+		GreedyPlanner(string paramfile);
 		vector<float> action();
 		int n;
 		vector<vector<float> > actions;
