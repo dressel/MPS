@@ -1,8 +1,10 @@
 #include "myplanner.h"
 
+
 MyPlanner::MyPlanner()
 {
 }
+
 
 
 /**
@@ -32,26 +34,28 @@ bool MyPlanner::read_config(string paramfile)
 	ifstream params;
 	string line;
 	params.open(paramfile);
-	if (params.is_open())
-	{
-		std::cout << "success" << std::endl;
-	}
-	else
-	{
+	if (!params.is_open())
 		std::cout << "FAILURE TO OPEN PLANNER CONFIGURATION FILE." << std::endl;
-	}
 
 	// first param will be size of domain;
 	getline(params, line);
 	double search_size = stod(line);
 	//std::cout << "search_size = " << search_size << std::endl;
 
-	// second is filter type, third is max_step size for vehicle
+	/* Sensor and vehicle */
+	// second is sensor type, third is max_step size for vehicle
 	getline(params, line);
 	int sensor_type = stoi(line);
+	if (sensor_type == 0)
+		this->x.sensor = new BearingOnly();
+
 	getline(params, line);
 	int max_step = stoi(line);
+	this->x.set_limit(search_size);
+	this->x.set_max_step(max_step);
+	this->x.set_xy();
 
+	/* Filter */
 	// fourth is filter type, fifth is secondary filter
 	getline(params, line);
 	int filter_type = stoi(line);
@@ -61,7 +65,8 @@ bool MyPlanner::read_config(string paramfile)
 		this->filter = new DF(search_size, filter_info);
 
 	//TODO: actually make the vehicle correctly
-	this->x = Vehicle();
+	//this->x = Vehicle();
+	//this->x.max_step = max_step;
 
 	params.close();
 	return true;

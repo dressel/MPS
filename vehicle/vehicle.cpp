@@ -1,15 +1,18 @@
 #include "vehicle.h"
 
-//Vehicle::Vehicle(double search_size, double max_step)
 Vehicle::Vehicle()
+{
+}
+
+Vehicle::Vehicle(double ss, double ms)
 {
 	double search_size = 10.0;
 	double max_step = 2.0;
 	this->x = search_size / 2.0;
 	this->y = search_size / 2.0;
 	this->heading = 0.0;
-	this->limit = search_size;
-	this->max_step = max_step;
+	this->limit = ss;
+	this->max_step = ms;
 	this->sensor = new BearingOnly();
 }
 
@@ -38,4 +41,25 @@ void Vehicle::move(float ax, float ay, float ah)
 	x += ax;
 	y += ay;
 	heading += ah;
+}
+
+void Vehicle::set_xy()
+{
+	set_xy(limit/2.0, limit/2.0);
+}
+
+void Vehicle::set_xy(double px, double py)
+{
+	this->x = px;
+	this->y = py;
+}
+
+void Vehicle::set_limit(double search_size)
+{
+	this->limit = search_size;
+}
+
+void Vehicle::set_max_step(double ms)
+{
+	this->max_step = ms;
 }
