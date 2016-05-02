@@ -38,7 +38,7 @@ bool MyPlanner::read_config(string paramfile)
 	}
 	else
 	{
-		std::cout << "failure" << std::endl;
+		std::cout << "FAILURE TO OPEN PLANNER CONFIGURATION FILE." << std::endl;
 	}
 
 	// first param will be size of domain;

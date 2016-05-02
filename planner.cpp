@@ -2,7 +2,7 @@
 #include <unistd.h>
 #include <limits.h>
 
-#include "../bearing/bearing.h"   //only change by ld
+#include "bearing/bearing.h"
 #include "planner.h"
 
 
