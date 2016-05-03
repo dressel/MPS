@@ -32,9 +32,10 @@ vector<float> CirclePlanner::action()
 		ax = -ax;
 		ay = -ay;
 	}
-	vector<float>commands (2);
+	vector<float>commands (3);
 	commands[0] = x.max_step * ay;
 	commands[1] = x.max_step * ax;
+	commands[2] = 0.0;
 
 	// preserve current action as last to check for direction
 	last[0] = ax;

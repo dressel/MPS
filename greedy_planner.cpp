@@ -11,18 +11,19 @@ GreedyPlanner::GreedyPlanner(string paramfile)
 	double deg = 0.0;
 	double step = 2.0 * M_PI / n;
 	vector<vector<float> > acts (n+1);
-	vector<float> temp (2);
 	int i;
 	for (i = 0; i < n; i++)
 	{
-		acts[i] = vector<float> (2);
+		acts[i] = vector<float> (3);
 		acts[i][0] = x.max_step * cos(deg);  // y-direction
 		acts[i][1] = x.max_step * sin(deg);  // x-direction
+		acts[i][2] = 0.0;
 		deg += step;
 	}
-	acts[n] = vector<float> (2);
+	acts[n] = vector<float> (3);
 	acts[n][0] = 0.0;
 	acts[n][1] = 0.0;
+	acts[n][2] = 0.0;
 	this->actions = acts;
 }
 
