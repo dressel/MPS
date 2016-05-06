@@ -23,16 +23,20 @@ using std::vector;
 #define STEP_LARGE 50.0
 
 
-NaivePlanner::NaivePlanner() : Planner(),
+NaivePlanner::NaivePlanner(std::string logfile_dir) : Planner(),
 _first_step(false)
 {
 	_observed_bearing.clear();
 	_observed_rssi.clear();
 	_step_sizes.clear();
+
+	// open the logfile
+	std::string output_logfile_name = logfile_dir + "naive_planner.log";
+	_logfile = fopen(output_logfile_name.c_str(), "a");
 }
 
 NaivePlanner::~NaivePlanner() {
-
+	fclose(_logfile);
 }
 
 
@@ -54,12 +58,15 @@ float NaivePlanner::calculate_step_size() {
 
 	float difference = abs(_observed_bearing[numObs-1] - _observed_bearing[numObs-2]); 
 	printf("[NAIVE] difference is %f\n", difference);
+	fprintf(_logfile, "difference is %f\n", difference);
 	if (difference < BEARING_TOL) {
 		printf("[NAIVE] step sizes within tolerance\n");
+		fprintf(_logfile, "[NAIVE] step sizes within tolerance\n");
 		// double the step size
 		nextStepSize *= STEP_INCREASE_FACTOR;
 	} else {
 		printf("[NAIVE] step size not within tol\n");
+		fprintf(_logfile, "step size not within tol\n");
 		// reset back to the smallest step size
 		nextStepSize = STEP_SMALL;
 	}
@@ -72,6 +79,7 @@ vector<float> NaivePlanner::calc_next_command(const double &bearing, const doubl
 	// bearing is degrees from 0 to 359
 
 	printf("[NAIVE] calculating the next command with input (%f, %f)\n", bearing, rssi);
+	fprintf(_logfile, "calculating the next command with input (%f, %f)\n", bearing, rssi);
 	
 	// for debug purposes, force a specific bearing and rssi
 	double bear = _bearing_max;
@@ -109,6 +117,7 @@ vector<float> NaivePlanner::calc_next_command_variable(const double &bearing, co
 	_step_sizes.push_back(step);
 
 	printf("[NAIVE] calculating the next variable size command with input (%f, %f)\n", bearing, rssi);
+	fprintf(_logfile, "calculating the next variable size command with input (%f, %f)\n", bearing, rssi);
 
 	// commands are a vector of [north, south]
 	vector<float> commands;

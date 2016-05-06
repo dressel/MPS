@@ -11,15 +11,16 @@
 #include <iostream>
 #include <cmath>
 #include <vector>
+#include <string>
 #include <inttypes.h>
 #include <unistd.h>
-#include <string.h>
+#include <stdio.h>
 
 #include "fixed_planner.h"
 
 using namespace std;
 
-FixedPlanner::FixedPlanner(const char * command_file_name) : Planner(),
+FixedPlanner::FixedPlanner(string logfile_dir, const char * command_file_name) : Planner(),
 _command_file_name(command_file_name),
 _num_cmds(0),
 _cmd_index(0)
@@ -28,11 +29,15 @@ _cmd_index(0)
 	_cmd_east.clear();
 	_cmd_yaw.clear();
 	_cmd_alt.clear();
+
+	// open the logfile
+	std::string output_logfile_name = logfile_dir + "fixed_planner.log";
+	_logfile = fopen(output_logfile_name.c_str(), "a");
 }
 
 
 FixedPlanner::~FixedPlanner() {
-
+	fclose(_logfile);
 }
 
 
@@ -65,13 +70,18 @@ bool FixedPlanner::initialize() {
 		_cmd_alt.push_back(cmdA);
 
 		printf("[FIXED PLANNER] North command: %f\n", cmdN);
+		fprintf(_logfile, "North command: %f\n", cmdN);
 		printf("[FIXED PLANNER] East cmd: %f\n", cmdE);
+		fprintf(_logfile, "East cmd: %f\n", cmdE);
 		printf("[FIXED PLANNER] Yaw cmd: %f\n", cmdY);
+		fprintf(_logfile, "Yaw cmd: %f\n", cmdY);
 		printf("[FIXED PLANNER] Alt cmd: %f\n", cmdA);
+		fprintf(_logfile, "Alt cmd: %f\n", cmdA);
 	}
 	
 	_num_cmds = _cmd_north.size();
 	printf("[FIXED PLANNER] num commands read: %d\n", _num_cmds);
+	fprintf(_logfile, "num commands read: %d\n", _num_cmds);
 	
 	return true;
 }
@@ -85,6 +95,7 @@ vector<float> FixedPlanner::action() {
 	}
 
 	printf("[FIXED PLANNER] sending move command with index: %d\n", _cmd_index);
+	fprintf(_logfile, "sending move command with index: %d\n", _cmd_index);
 
 	// extract the next north and east commands
 	float nextNorth = _cmd_north[_cmd_index];
@@ -93,6 +104,7 @@ vector<float> FixedPlanner::action() {
 	float nextAlt = _cmd_alt[_cmd_index];
 
 	printf("[FIXED PLANNER] sending command %i: N %f\tE %f\tY %f\tA %f\n", _cmd_index, nextNorth, nextEast, nextYaw, nextAlt);
+	fprintf(_logfile, "sending command %i: N %f\tE %f\tY %f\tA %f\n", _cmd_index, nextNorth, nextEast, nextYaw, nextAlt);
 
 	_cmd_index++;
 

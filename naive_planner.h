@@ -26,7 +26,7 @@ public:
 	/**
 	 * constructor
 	 */
-	NaivePlanner();
+	NaivePlanner(std::string logfile_dir);
 
 	/**
 	 * desctructor
@@ -53,6 +53,9 @@ private:
 	vector<float> _step_sizes;
 
 	bool _first_step;
+
+	// the logfile to write things to
+	FILE *_logfile;
 
 
 	/**

@@ -9,6 +9,8 @@
 #ifndef _FIXED_PLANNER_H_
 #define _FIXED_PLANNER_H_
 
+#include <string>
+
 #include "planner.h"
 
 
@@ -27,7 +29,7 @@ public:
 	 * constructor
 	 * @param command_file_name  the path to the command file.
 	 */
-	FixedPlanner(const char * command_file_name);
+	FixedPlanner(std::string logfile_dir, const char * command_file_name);
 
 	/**
 	 * desctructor
@@ -50,6 +52,9 @@ private:
 
 	// the file containing all the commands
 	const char * _command_file_name;
+
+	// the logfile to write things to
+	FILE *_logfile;
 
 	// the commands themselves
 	vector<float> _cmd_north;
