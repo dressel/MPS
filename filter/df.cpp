@@ -8,6 +8,7 @@ DF::DF(double l, int n)
 	this->n = n;
 	this->cell_size = l/n;
 	this->num_bins = 36;
+	this->bin_offset = 0;
 
 	// Create the belief, then 
 	this->b = vector<vector<double> >(n);
@@ -96,7 +97,10 @@ double DF::O(double px, double py, double ph, double tx, double ty, int obs_bin,
 {
 	double prob = 0.0;
 	if (s->type() == 0)
-		prob = O(px, py, tx, ty, obs_bin, static_cast<BearingOnly *>(s));
+		return O(px, py, tx, ty, obs_bin, static_cast<BearingOnly *>(s));
+	if (s->type() == 1)
+		return O(px, py, ph, tx, ty, obs_bin, static_cast<DirOmni *>(s));
+
 	return prob;
 }
 
@@ -106,16 +110,33 @@ double DF::O(double px, double py, double tx, double ty, int obs_bin, BearingOnl
 	double ang_deg = true_bearing(px, py, tx, ty);
 
 	pair<double, double> rbe = rel_bin_edges(ang_deg, obs_bin);
-	//Normal d = Normal(0.0, bo->noise);
 	Normal d(0.0, bo->noise);
 	double prob = d.cdf(rbe.second) - d.cdf(rbe.first);
 
-
 	return prob;
-	// rel_start, rel_end = rel_bin_edges(ang_deg, o, df)
-	// d = Normal(0, x.sensor.noise_sigma)
-	// p = cdf(d, rel_end) - cdf(d, rel_start)
 }
+//
+// for the DirOmni sensor
+double DF::O(double px, double py, double ph, double tx, double ty, int obs_bin, DirOmni *dom)
+{
+	double rel_bearing = ph - true_bearing(px, py, tx, ty);
+	if (rel_bearing < 0.0)
+		rel_bearing += 360.0;
+
+	int rel_int = (int)rel_bearing;
+
+	Normal d(dom->_means[rel_int], dom->_stds[rel_int]);
+	return d.cdf(obs_bin+1) - d.cdf(obs_bin);
+
+	/*
+	pair<double, double> rbe = rel_bin_edges(ang_deg, obs_bin);
+	Normal d(0.0, bo->noise);
+	double prob = d.cdf(rbe.second) - d.cdf(rbe.first);
+	*/
+
+	//return prob;
+}
+
 
 /**
  * Finds the start and end points for the cdf.
@@ -185,7 +206,10 @@ int DF::obs2bin(double o, Sensor *s)
 
 	int ob = 0;
 	if (s->type() == 0)
-		ob = this->obs2bin(o, static_cast<BearingOnly *>(s));
+		return obs2bin(o, static_cast<BearingOnly *>(s));
+	if (s->type() == 1)
+		return obs2bin(o, static_cast<DirOmni *>(s));
+
 	return ob;
 }
 		
@@ -200,6 +224,12 @@ int DF::obs2bin(double o, BearingOnly *s)
 		ob = 0;
 	return ob;
 }
+
+int DF::obs2bin(double o, DirOmni *s)
+{
+	return (int)o;
+}
+
 
 double DF::true_bearing(double px, double py, double tx, double ty)
 {
@@ -229,20 +259,20 @@ double DF::p_obs(Vehicle x, double xp, double yp, double hp, int ob)
 	}
 	return prob;
 }
-double DF::mutual_information(Vehicle x, vector<double> np)
+double DF::mutual_information(Vehicle uav, vector<double> np)
 {
-	double nh = 3.0;
-	double prob = p_obs(x, np[0], np[1], nh, 0);
+	double prob = p_obs(uav, np[0], np[1], np[2], 0);
 	double half_cell = cell_size / 2.0;
 
 	double H_o = 0.0;
 	double H_o_t = 0.0;
-	int ob, theta_x, theta_y;
+	int ob, theta_x, theta_y, obo;
 	double po, pot, xj, yj;
 
-	for (ob = 0; ob < 36; ob ++)
+	for (ob = 0; ob < num_bins; ob ++)
 	{
-		po = p_obs(x, np[0], np[1], nh, ob);
+		obo = ob - bin_offset;
+		po = p_obs(uav, np[0], np[1], np[2], obo);
 		if (po > 0.0)
 			H_o -= po * log(po);
 
@@ -254,7 +284,7 @@ double DF::mutual_information(Vehicle x, vector<double> np)
 				xj = theta_x * cell_size + half_cell;
 				yj = theta_y * cell_size + half_cell;
 
-				pot = O(np[0], np[1], 0.0, xj, yj, ob, x.sensor);
+				pot = O(np[0], np[1], np[2], xj, yj, obo, uav.sensor);
 				if (pot > 0.0)
 					H_o_t -= pot * b[theta_x][theta_y] * log(pot);
 			}

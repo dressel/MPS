@@ -24,9 +24,9 @@ class MyPlanner : public Planner
 		virtual vector<float> action() {};
 
 	//protected:
-		bool read_param_line(string line);
+		bool read_param_line(string line, string path);
 		bool read_search_size_line(string line);
-		bool read_sensor_line(string line);
+		bool read_sensor_line(string line, string path);
 		bool read_filter_line(string line);
 
 		/**

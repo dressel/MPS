@@ -1,0 +1,9 @@
+# commentary
+# filter should be made before sensor, I think
+search_size,100
+filter,10
+sensor,do
+0
+5
+0
+11

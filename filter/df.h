@@ -15,6 +15,7 @@ class DF : public Filter
 		int n;
 		double cell_size;
 		int num_bins;
+		int bin_offset;
 		vector<vector<double> > b;
 
 		// for right now, assume 36 bins
@@ -25,11 +26,13 @@ class DF : public Filter
 		double p_obs(Vehicle x, double xp, double yp, double hp, int ob);
 		int obs2bin(double o, Sensor *s);
 		int obs2bin(double o, BearingOnly *s);
+		int obs2bin(double o, DirOmni *s);
 		void print_belief();
 		void initial_belief();
 		void reset();
 		double O(double px, double py, double ph, double tx, double ty, int obs_bin, Sensor *s);
 		double O(double px, double py, double tx, double ty, int obs_bin, BearingOnly *bo);
+		double O(double px, double py, double ph, double tx, double ty, int obs_bin, DirOmni *s);
 		// TODO move this guy, he shouldn't be here
 		double true_bearing(double px, double py, double tx, double ty);
 		pair<double,double> rel_bin_edges(double bearing, int obs_bin);
