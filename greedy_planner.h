@@ -11,6 +11,8 @@ class GreedyPlanner : public MyPlanner
 		vector<float> action();
 		int n;
 		vector<vector<float> > actions;
+
+	private:
 		vector<float> find_best_action(Vehicle x);
 };
 #endif

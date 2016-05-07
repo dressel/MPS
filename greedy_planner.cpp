@@ -37,10 +37,6 @@ vector<float> GreedyPlanner::action()
 	return find_best_action(x);
 }
 
-double get_obs()
-{
-}
-
 
 /**
  * Loops through all possible actions, selecting the best.
