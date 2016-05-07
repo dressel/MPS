@@ -18,6 +18,6 @@ class MyPlanner : public Planner
 		double get_obs();
 		virtual bool initialize() {};
 		virtual vector<float> action() {};
-		bool read_config(string paramfile);
+		string read_config(string paramfile);
 };
 #endif

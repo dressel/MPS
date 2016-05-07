@@ -29,13 +29,20 @@ double MyPlanner::get_obs()
  * Reads in a configuration file and creates the vehicle and filter
  * Should fail gracefully
  */
-bool MyPlanner::read_config(string paramfile)
+string MyPlanner::read_config(string paramfile)
 {
 	ifstream params;
 	string line;
 	params.open(paramfile);
 	if (!params.is_open())
-		std::cout << "FAILURE TO OPEN PLANNER CONFIGURATION FILE." << std::endl;
+	{
+		std::cout << "FAILURE TO OPEN PLANNER CONFIGURATION FILE.\n";
+		return "error";
+	}
+
+	// get the path
+	int num_chars = paramfile.find_last_of("/") + 1;
+	string path = paramfile.substr(0, num_chars);
 
 	// first param will be size of domain;
 	getline(params, line);
@@ -69,5 +76,6 @@ bool MyPlanner::read_config(string paramfile)
 	//this->x.max_step = max_step;
 
 	params.close();
-	return true;
+
+	return path;
 }
