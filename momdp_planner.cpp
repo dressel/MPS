@@ -11,20 +11,35 @@ AlphaVector::AlphaVector(int a, vector<float> vec)
 
 MOMDPPlanner::MOMDPPlanner(string paramfile)
 {
-	string path = read_config(paramfile);
+	_param_file = paramfile;
+}
+
+// Returns true if ok, false if bad
+bool MOMDPPlanner::initialize()
+{
+	string path = read_config(_param_file);
+	if (path == "error")
+	{
+		// log error in read_config
+		return false;
+	}
 
 	// technically, we should check, but we really know this is ok
 	// perhaps I could do a dynamic cast...
+	/* C */
+	std::cout << "filly type = " << this->filter->type << std::endl;
+	if (this->filter->type != 0)
+	{
+		// log failure reason
+		return false;
+	}
 	DF * f = static_cast<DF *>(this->filter);
-	this->_n = f->n;
-	int n = f->n;
-	int n2 = n*n;
-	//std::cout << "n = " << n << std::endl;
+	_n = f->n;
+	int n2 = _n*_n;
 	policy.resize(n2);
-	_x = n/2;
-	_y = n/2;
+	_x = _n/2;
+	_y = _n/2;
 
-	//std::cout << path << std::endl;
 	string a_path = path + "policy/alpha_actions.bin";
 	string o_path = path + "policy/alpha_obs.bin";
 	string v_path = path + "policy/alpha_vectors.bin";
@@ -39,7 +54,7 @@ MOMDPPlanner::MOMDPPlanner(string paramfile)
 	float v;
 	int s;
 	vector<float>* temp;
-	while (!a_file.eof())  // convert to while loop
+	while (!a_file.eof())
 	{
 		a_file.read(reinterpret_cast<char*>(&a), sizeof(int));
 		o_file.read(reinterpret_cast<char*>(&o), sizeof(int));
@@ -53,13 +68,15 @@ MOMDPPlanner::MOMDPPlanner(string paramfile)
 		}
 		policy[o].push_back(AlphaVector(a, *temp)); //TODO new issues
 	}
+
+	return true;
 }
 
 
 vector<float> MOMDPPlanner::action()
 {
 	double o = get_obs();
-	filter->update(x, o);
+	filter->update(_uav, o);
 
 	/* Convert 2-D belief into 1-D vector */
 	DF * f = static_cast<DF *>(this->filter);

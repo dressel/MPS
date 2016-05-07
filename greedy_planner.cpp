@@ -1,9 +1,20 @@
 #include "greedy_planner.h"
 
 //GreedyPlanner::GreedyPlanner(Vehicle x, Filter *f, int n)
+	//_param_file = paramfile;
 GreedyPlanner::GreedyPlanner(string paramfile)
 {
-	read_config(paramfile);
+	_param_file = paramfile;
+}
+
+bool GreedyPlanner::initialize()
+{
+	string path = read_config(_param_file);
+	if (path == "error")
+	{
+		// TODO: log this somewhere
+		return false;
+	}
 
 	/* create vector of possible actions */
 	int n = 8;
@@ -15,8 +26,8 @@ GreedyPlanner::GreedyPlanner(string paramfile)
 	for (i = 0; i < n; i++)
 	{
 		acts[i] = vector<float> (3);
-		acts[i][0] = x.max_step * cos(deg);  // y-direction
-		acts[i][1] = x.max_step * sin(deg);  // x-direction
+		acts[i][0] = _uav.max_step * cos(deg);  // y-direction
+		acts[i][1] = _uav.max_step * sin(deg);  // x-direction
 		acts[i][2] = 0.0;
 		deg += step;
 	}
@@ -25,23 +36,25 @@ GreedyPlanner::GreedyPlanner(string paramfile)
 	acts[n][1] = 0.0;
 	acts[n][2] = 0.0;
 	this->actions = acts;
+
+	return true;
 }
 
 vector<float> GreedyPlanner::action()
 {
 	/* determine observation and update belief */
 	double o = get_obs();
-	filter->update(x, o);
+	filter->update(_uav, o);
 
 	/* loop through all possible actions, selecting best */
-	return find_best_action(x);
+	return find_best_action(_uav);
 }
 
 
 /**
  * Loops through all possible actions, selecting the best.
  */
-vector<float> GreedyPlanner::find_best_action(Vehicle x)
+vector<float> GreedyPlanner::find_best_action(Vehicle uav)
 {
 	int i;
 	vector<float> a;
@@ -53,8 +66,8 @@ vector<float> GreedyPlanner::find_best_action(Vehicle x)
 	{
 		/* find out where action takes you */
 		a = actions[i];
-		xp = x.new_pose(a);
-		mi = filter->mutual_information(x, xp);
+		xp = uav.new_pose(a);
+		mi = filter->mutual_information(uav, xp);
 		//std::cout << "mi = " << mi << std::endl;
 		if (mi > best_mi)
 		{

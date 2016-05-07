@@ -9,6 +9,7 @@ class GreedyPlanner : public MyPlanner
 		//GreedyPlanner(Vehicle x, Filter *f, int n);
 		GreedyPlanner(string paramfile);
 		vector<float> action();
+		bool initialize();
 		int n;
 		vector<vector<float> > actions;
 

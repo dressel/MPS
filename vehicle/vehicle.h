@@ -4,6 +4,7 @@
 #include <vector>
 #include "sensor.h"
 #include "bearingonly.h"
+#include "diromni.h"
 
 using std::vector;
 

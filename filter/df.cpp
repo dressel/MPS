@@ -3,6 +3,7 @@
 // constructor
 DF::DF(double l, int n)
 {
+	this->type = 0;
 	this->l = l;
 	this->n = n;
 	this->cell_size = l/n;
