@@ -96,7 +96,7 @@ int MyPlanner::read_search_size_line(string line)
 	_search_size = stod(line.substr(ind, line.length()-ind));
 	_uav.set_limit(_search_size);
 	_uav.set_xy();
-	_uav.set_max_step(4);	// TODO: do this correctly
+	_uav.set_max_step(10.0);	// TODO: do this correctly
 	return 0;
 }
 int MyPlanner::read_sensor_line(string line, string path)
@@ -114,27 +114,37 @@ int MyPlanner::read_sensor_line(string line, string path)
 	if (sub == "do")
 	{
 		DirOmni *domni = new DirOmni();
-		//string temp = path + "norm_means.csv";
 		e_flag += domni->set_means(path + "norm_means.csv");
 		e_flag += domni->set_stds(path + "norm_means.csv");
 		_uav.sensor = domni;
-		// this is very ugly
+		// TODO: check that filter is a discrete filter
 		DF* f = static_cast<DF*>(filter);
 		f->bin_offset = -20;
 		return e_flag;
 	}
-	// log failure to recognize sensor
-	//
+
 	planner_log << "Failed to recognize requested sensor." << endl;
 	return -1;
 }
 
 int MyPlanner::read_filter_line(string line)
 {
-	// TODO: don't hard code this
-	int filter_info = 11;
-	this->filter = new DF(_search_size, filter_info);
-	return 0;
+	string sub;
+	int e_flag = 0;
+	stringstream ss(line);
+	getline(ss, sub, ',');
+	getline(ss, sub, ',');		// done twice to get second element
+
+	if (sub == "df")
+	{
+		getline(ss, sub, ',');
+		int filter_info = stoi(sub);
+		filter = new DF(_search_size, filter_info);
+		return 0;
+	}
+
+	planner_log << "Failed to recognize requested filter." << endl;
+	return -1;
 }
 
 void MyPlanner::update_belief()
