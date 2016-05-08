@@ -73,6 +73,9 @@ vector<float> GreedyPlanner::find_best_action()
 			best_i = i;
 		}
 	}
+
+	// move the vehicle too
+	_uav.move(actions[best_i][0], actions[best_i][1], actions[best_i][2]);
 	return actions[best_i];
 }
 

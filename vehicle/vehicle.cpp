@@ -42,11 +42,16 @@ void Vehicle::move(float ax, float ay)
 	y += ay;
 }
 
+// TODO: keep the vehicle in bounds
 void Vehicle::move(float ax, float ay, float ah)
 {
 	x += ax;
 	y += ay;
 	heading += ah;
+	if (heading >= 360.0)
+		heading -= 360.0;
+	if (heading < 0.0)
+		heading += 360.0;
 }
 
 void Vehicle::set_xy()
