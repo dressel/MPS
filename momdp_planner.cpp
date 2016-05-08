@@ -118,6 +118,7 @@ vector<float> MOMDPPlanner::action()
 
 	//loop
 	bool not_rotated = true;
+	bool finished = false;
 	int dx, dy;
 	int old_x = _x;
 	int old_y = _y;
@@ -140,6 +141,8 @@ vector<float> MOMDPPlanner::action()
 		// If we rotate, that is cool
 		if (max_a > 7);
 			not_rotated = false;
+		if (max_a == 9)
+			finished = true;
 
 		// convert action to change in _x, _y
 		// TODO: need to check that we stay in bounds
@@ -173,11 +176,25 @@ vector<float> MOMDPPlanner::action()
 		}
 	}
 
+
 	/* Create the command and move the UAV */
 	double step_size = _search_size / _n;
 	vector<float> command(3,0.0);
+	if (finished)
+	{
+		planner_log << "Search Complete." << endl;
+		command[0] = -1000.0;
+		command[1] = -1000.0;
+		return command;
+	}
 	command[0] = step_size*(_y - old_y);
 	command[1] = step_size*(_x - old_x);
+	if ((command[0] == 0) && (command[1] == 0))
+	{
+		command[0] = -2000.0;
+		command[1] = -2000.0;
+		return command;
+	}
 	_uav.move(command[1], command[0], 0.0);
 
 	return command;
