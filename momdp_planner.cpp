@@ -189,12 +189,6 @@ vector<float> MOMDPPlanner::action()
 	}
 	command[0] = step_size*(_y - old_y);
 	command[1] = step_size*(_x - old_x);
-	if ((command[0] == 0) && (command[1] == 0))
-	{
-		command[0] = -2000.0;
-		command[1] = -2000.0;
-		return command;
-	}
 	_uav.move(command[1], command[0], 0.0);
 
 	return command;
