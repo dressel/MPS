@@ -7,6 +7,7 @@
  */
 
 #include <cstdlib>
+#include <fstream>
 #include <unistd.h>
 #include <limits.h>
 
@@ -77,8 +78,9 @@ void Planner::update_observation(const double &heading, const double &dir_gain, 
 
 
 void Planner::update_observations(const vector<double> headings, const vector<double> dir_gains, const vector<double> omni_gains, const vector<int> norm_gains,
-							 double &bearing_cc, double &bearing_max, double &bearing_max3) {
+							 const double &bearing_cc, const double &bearing_max, const double &bearing_max3) {
 	
+	printf("[PLANNER] updating observation with bearings: %f, %f, %f\n", bearing_cc, bearing_max, bearing_max3);
 	// copy over the vectors
 	_angles = headings;
 	_gains = dir_gains;

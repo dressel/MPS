@@ -66,7 +66,7 @@ public:
 	 * @param bearing_max3 calculated max3 bearing
 	 */
 	void update_observations(const vector<double> headings, const vector<double> dir_gains, const vector<double> omni_gains, const vector<int> norm_gains,
-							 double &bearing_cc, double &bearing_max, double &bearing_max3);
+							 const double &bearing_cc, const double &bearing_max, const double &bearing_max3);
 
 	/**
 	 * initialize the current planner. To be implemented by each individual planner.

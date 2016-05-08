@@ -42,6 +42,9 @@ NaivePlanner::~NaivePlanner() {
 
 void NaivePlanner::update_naive_observations() {
 
+	printf("[NAIVE] updating the naive observation\n");
+	fprintf(_logfile, "[NAIVE] updating the naive observation\n");
+
 	/* simply adding the most recent bearing and max rssi to the list of observations we've made */
 	_observed_bearing.push_back(_bearing_max);
 	_observed_rssi.push_back(_max_rssi);
