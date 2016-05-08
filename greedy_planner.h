@@ -6,14 +6,30 @@
 class GreedyPlanner : public MyPlanner
 {
 	public:
-		//GreedyPlanner(Vehicle x, Filter *f, int n);
-		GreedyPlanner(string paramfile);
-		vector<float> action();
-		bool initialize();
-		int n;
-		vector<vector<float> > actions;
 
-	private:
-		vector<float> find_best_action(Vehicle x);
+		/**
+		 * Constructor
+		 */
+		GreedyPlanner(string paramfile, string logfile);
+
+		/**
+		 * Required function to direct vehicle.
+		 *
+		 * Returns a 3-element vector of floats: (d_north, d_east, d_yaw).
+		 */
+		vector<float> action();
+
+		/**
+		 * Returns true if an error occurred.
+		 */
+		int initialize();
+
+		// TODO: function that prints out actions so we can see if correct
+
+	//private:
+		vector<vector<float> > actions;
+		vector<float> find_best_action();
+		int bo_initialize();
+		int do_initialize();
 };
 #endif

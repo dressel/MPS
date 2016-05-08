@@ -120,11 +120,16 @@ double DF::O(double px, double py, double tx, double ty, int obs_bin, BearingOnl
 double DF::O(double px, double py, double ph, double tx, double ty, int obs_bin, DirOmni *dom)
 {
 	double rel_bearing = ph - true_bearing(px, py, tx, ty);
-	if (rel_bearing < 0.0)
-		rel_bearing += 360.0;
-
 	int rel_int = (int)rel_bearing;
+	if (rel_int < 0)
+		rel_bearing += 360;
+	if (rel_int >= 360)
+		rel_bearing -= 360;
 
+	//int rel_int = (int)rel_bearing;
+
+	if (dom->_stds[rel_int] == 0)
+		cout << "rel_int = " << rel_int;
 	Normal d(dom->_means[rel_int], dom->_stds[rel_int]);
 	return d.cdf(obs_bin+1) - d.cdf(obs_bin);
 
@@ -271,7 +276,7 @@ double DF::mutual_information(Vehicle uav, vector<double> np)
 
 	for (ob = 0; ob < num_bins; ob ++)
 	{
-		obo = ob - bin_offset;
+		obo = ob + bin_offset;
 		po = p_obs(uav, np[0], np[1], np[2], obo);
 		if (po > 0.0)
 			H_o -= po * log(po);

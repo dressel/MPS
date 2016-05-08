@@ -18,15 +18,21 @@ Vehicle::Vehicle(double ss, double ms)
 
 // TODO: actually check the bounds here
 /**
+ * Computes a new pose given an action, but does not move vehicle.
  * Recall that actions are north first, then east first
  */
-vector<double> Vehicle::new_pose(vector<float> a)
+vector<double> Vehicle::new_pose(vector<float> &a)
 {
-	double new_y = y + a[0];
-	double new_x = x + a[1];
-	vector<double> temp (2);
-	temp[0] = new_x;
-	temp[1] = new_y;
+	vector<double> temp (3);
+	temp[0] = x + a[1];
+	temp[1] = y + a[0];
+	double new_h = heading + a[3];
+	if (new_h > 360.0)
+		new_h -= 360.0;
+	if (new_h < 0.0)
+		new_h += 360.0;
+	temp[2] = new_h;
+
 	return temp;
 }
 

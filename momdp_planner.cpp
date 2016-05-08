@@ -2,6 +2,7 @@
 #include <numeric>
 
 using std::vector;
+using std::endl;
 
 AlphaVector::AlphaVector(int a, vector<float> vec)
 {
@@ -15,23 +16,17 @@ MOMDPPlanner::MOMDPPlanner(string paramfile)
 }
 
 // Returns true if ok, false if bad
-bool MOMDPPlanner::initialize()
+int MOMDPPlanner::initialize()
 {
 	string path = read_config(_param_file);
 	if (path == "error")
-	{
-		// log error in read_config
-		return false;
-	}
+		return -1;
 
-	// technically, we should check, but we really know this is ok
-	// perhaps I could do a dynamic cast...
-	/* C */
-	std::cout << "filly type = " << this->filter->type << std::endl;
+	/* check that the filter is of  the correct type */
 	if (this->filter->type != 0)
 	{
-		// log failure reason
-		return false;
+		planner_log << "MOMDP expects a bearing only sensor" << endl;
+		return -1;
 	}
 	DF * f = static_cast<DF *>(this->filter);
 	_n = f->n;
@@ -69,7 +64,7 @@ bool MOMDPPlanner::initialize()
 		policy[o].push_back(AlphaVector(a, *temp)); //TODO new issues
 	}
 
-	return true;
+	return 0;
 }
 
 

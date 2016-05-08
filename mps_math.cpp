@@ -1,6 +1,9 @@
 #include <iostream>  //temp
 #include "mps_math.h"
 
+using std::cout;
+using std::endl;
+
 Normal::Normal(double mu, double sigma)
 {
 	this->mu = mu;
@@ -13,10 +16,8 @@ double Normal::cdf(double x)
 	double tempans = 0.5 * (1 + erf(temp));
 	if isnan((tempans))
 	{
-		std::cout << "Normal: temp = " <<temp << ", tempans = " << tempans << std::endl;
-		std::cout << "x = " << x <<std::endl;
-		std::cout << "mu = " << mu <<std::endl;
-		std::cout << "sigma = " << sigma <<std::endl;
+		cout << "Normal: temp = " << temp << ", tempans = " << tempans << endl;
+		cout << "x = " << x << ", mu = " << mu << ", sigma = " << sigma << endl;
 	}
 		
 	return 0.5 * (1 + erf(temp));

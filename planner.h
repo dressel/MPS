@@ -70,9 +70,9 @@ public:
 
 	/**
 	 * initialize the current planner. To be implemented by each individual planner.
-	 * @return true if initialization was successful
+	 * @return -1 if initialization fails
 	 */
-	virtual bool initialize() {};
+	virtual int initialize() {};
 
 	/**
 	 * calculates what the next action should be.  This is to be each individual planner.

@@ -24,8 +24,11 @@ class Vehicle
 		void set_max_step(double max_step);
 		void set_xy();
 		void set_xy(double x, double y);
-		//Vehicle();
-		vector<double> new_pose(vector<float> a);
+
+		/**
+		 * Returns a 3-element vector of doubles.
+		 */
+		vector<double> new_pose(vector<float> &a);
 		void move(float ax, float ay);
 		void move(float ax, float ay, float ah);
 };

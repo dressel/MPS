@@ -41,7 +41,7 @@ FixedPlanner::~FixedPlanner() {
 }
 
 
-bool FixedPlanner::initialize() {
+int FixedPlanner::initialize() {
 
 	// load up all the commands from the file
 	string file_name(_command_file_name);
@@ -49,7 +49,7 @@ bool FixedPlanner::initialize() {
 
 	if (!cmd_file.is_open()) {
 		// means there is an error in loading the file
-		return false;
+		return -1;
 	}
 
 	// make sure vectors are clean
@@ -83,7 +83,7 @@ bool FixedPlanner::initialize() {
 	printf("[FIXED PLANNER] num commands read: %d\n", _num_cmds);
 	fprintf(_logfile, "num commands read: %d\n", _num_cmds);
 	
-	return true;
+	return 0;
 }
 
 

@@ -18,16 +18,18 @@ class MyPlanner : public Planner
 		Vehicle _uav;
 		Filter *filter;
 		string _param_file;
+		string _log_path;
+		std::ofstream planner_log;
 		double _search_size;
 		double get_obs();
-		virtual bool initialize() {};
+		virtual int initialize() {};
 		virtual vector<float> action() {};
 
 	//protected:
-		bool read_param_line(string line, string path);
-		bool read_search_size_line(string line);
-		bool read_sensor_line(string line, string path);
-		bool read_filter_line(string line);
+		int read_param_line(string line, string path);
+		int read_search_size_line(string line);
+		int read_sensor_line(string line, string path);
+		int read_filter_line(string line);
 
 		/**
 		 * If there is an error, it will return the string "error"

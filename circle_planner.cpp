@@ -5,21 +5,18 @@ CirclePlanner::CirclePlanner(string paramfile)
 	_param_file = paramfile;
 }
 
-bool CirclePlanner::initialize()
+int CirclePlanner::initialize()
 {
 	/* read the parameter file, logging any errors */
 	string path = read_config(_param_file);
 	if (path == "error")
-	{
-		// log error in read_config
-		return false;
-	}
+		return -1;
 
 	// handle last action
 	this->last.resize(2);
 	this->last[0] = 0.0;
 	this->last[1] = 0.0;
-	return true;
+	return 0;
 }
 
 vector<float> CirclePlanner::action()

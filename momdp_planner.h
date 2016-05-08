@@ -17,7 +17,7 @@ class MOMDPPlanner : public MyPlanner
 		vector< vector<AlphaVector>> policy;
 		MOMDPPlanner(string paramfile);
 		vector<float> action();
-		bool initialize();
+		int initialize();
 		int _n;		// number of cells per side
 		vector<vector<float> > actions;
 

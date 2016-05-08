@@ -35,9 +35,9 @@ public:
 
 	/**
 	 * initialize the planner
-	 * @return true if successful
+	 * @return -1 if failure
 	 */
-	bool initialize();
+	int initialize();
 
 	/**
 	 * determins the next action to take.

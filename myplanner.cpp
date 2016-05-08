@@ -40,7 +40,7 @@ string MyPlanner::read_config(string paramfile)
 	param_stream.open(paramfile);
 	if (!param_stream.is_open())
 	{
-		std::cout << "FAILURE TO OPEN PLANNER CONFIGURATION FILE.\n";
+		planner_log << "FAILURE TO OPEN PLANNER CONFIGURATION FILE." <<endl;
 		return "error";
 	}
 
@@ -53,7 +53,7 @@ string MyPlanner::read_config(string paramfile)
 	while( !getline(param_stream, line).eof() )
 	{
 		err_flag = read_param_line(line, path);
-		if (err_flag == true)
+		if (err_flag)
 		{
 			param_stream.close();
 			return "error";
@@ -69,11 +69,11 @@ string MyPlanner::read_config(string paramfile)
 /**
  * Returns error if the line has some error in it
  */
-bool MyPlanner::read_param_line(string line, string path)
+int MyPlanner::read_param_line(string line, string path)
 {
 	//cout << "rpl = " << line << endl;
 	if (line.substr(0,1) == "#")	// line is a comment
-		return false;
+		return 0;
 
 	if (line.find("search_size") != string::npos)
 		return read_search_size_line(line);
@@ -83,53 +83,52 @@ bool MyPlanner::read_param_line(string line, string path)
 		return read_filter_line(line);
 
 	// it's ok if we don't recognize the line
-	return false;
+	return 0;
 }
 
-bool MyPlanner::read_search_size_line(string line)
+int MyPlanner::read_search_size_line(string line)
 {
 	int ind = line.find_last_of(",")+1;
 	_search_size = stod(line.substr(ind, line.length()-ind));
 	_uav.set_limit(_search_size);
 	_uav.set_xy();
 	_uav.set_max_step(4);	// TODO: do this correctly
-	return false;
+	return 0;
 }
-bool MyPlanner::read_sensor_line(string line, string path)
+int MyPlanner::read_sensor_line(string line, string path)
 {
 	string sub;
+	int e_flag = 0;
 	stringstream ss(line);
 	getline(ss, sub, ',');
 	getline(ss, sub, ',');		// done twice to get second element
 	if (sub == "bo")
 	{
 		_uav.sensor = new BearingOnly();
-		return false;
+		return 0;
 	}
 	if (sub == "do")
 	{
-		bool erflag1 = true;
 		DirOmni *domni = new DirOmni();
-		string temp = path + "norm_means.csv";
-		cout << "temp = " << temp << endl;
-		//erflag1 = domni->set_means(path + "norm_means.csv");
-		erflag1 = domni->set_means(temp);
-		domni->set_stds(path + "norm_means.csv");
+		//string temp = path + "norm_means.csv";
+		e_flag += domni->set_means(path + "norm_means.csv");
+		e_flag += domni->set_stds(path + "norm_means.csv");
 		_uav.sensor = domni;
-		cout << "erflag1 = " << erflag1 << endl;
 		// this is very ugly
 		DF* f = static_cast<DF*>(filter);
 		f->bin_offset = -20;
-		return erflag1;
+		return e_flag;
 	}
 	// log failure to recognize sensor
-	return false;
+	//
+	planner_log << "Failed to recognize requested sensor." << endl;
+	return -1;
 }
 
-bool MyPlanner::read_filter_line(string line)
+int MyPlanner::read_filter_line(string line)
 {
 	// TODO: don't hard code this
 	int filter_info = 11;
 	this->filter = new DF(_search_size, filter_info);
-	return false;
+	return 0;
 }

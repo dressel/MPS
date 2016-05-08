@@ -8,7 +8,7 @@ class CirclePlanner : public MyPlanner
 	public:
 		//CirclePlanner(Vehicle x, Filter *f);
 		CirclePlanner(string paramfile);
-		bool initialize();
+		int initialize();
 		vector<float> action();
 		vector<float> last;
 };

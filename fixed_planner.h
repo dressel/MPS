@@ -40,7 +40,7 @@ public:
 	 * load in all the commands from file.
 	 * @return  true if successfully initialized
 	 */
-	bool initialize();
+	int initialize();
 
 	/**
 	 * return the next command.
