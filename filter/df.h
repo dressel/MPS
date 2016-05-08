@@ -22,22 +22,30 @@ class DF : public Filter
 		DF(double l, int n);
 		int update(Vehicle x, double o);
 		double mutual_information(Vehicle x, vector<double> xp);
-		double p_obs();
-		double p_obs(Vehicle x, double xp, double yp, double hp, int ob);
-		int obs2bin(double o, Sensor *s);
-		int obs2bin(double o, BearingOnly *s);
-		int obs2bin(double o, DirOmni *s);
 		void print_belief();
 		void initial_belief();
 		void reset();
+		// TODO move this guy, he shouldn't be here
+		double true_bearing(double px, double py, double tx, double ty);
+
+	private:
+		double fit_180(double angle);
+		pair<double, double> bin2deg(int obs_bin);
+		pair<double,double> rel_bin_edges(double bearing, int obs_bin);
+
+		/* Multiple dispatch O on sensor type */
 		double O(double px, double py, double ph, double tx, double ty, int obs_bin, Sensor *s);
 		double O(double px, double py, double tx, double ty, int obs_bin, BearingOnly *bo);
 		double O(double px, double py, double ph, double tx, double ty, int obs_bin, DirOmni *s);
-		// TODO move this guy, he shouldn't be here
-		double true_bearing(double px, double py, double tx, double ty);
-		pair<double,double> rel_bin_edges(double bearing, int obs_bin);
-		double fit_180(double angle);
-		pair<double, double> bin2deg(int obs_bin);
+
+		/* Multiple dispatch obs2bin on sensor type */
+		int obs2bin(double o, Sensor *s);
+		int obs2bin(double o, BearingOnly *s);
+		int obs2bin(double o, DirOmni *s);
+
+		/* helpers for mutual information */
+		double p_obs();
+		double p_obs(Vehicle x, double xp, double yp, double hp, int ob);
 
 };
 #endif	// FILTER_DF_H_
