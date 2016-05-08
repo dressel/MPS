@@ -10,9 +10,10 @@ AlphaVector::AlphaVector(int a, vector<float> vec)
 	this->vec = vec;
 }
 
-MOMDPPlanner::MOMDPPlanner(string paramfile)
+MOMDPPlanner::MOMDPPlanner(string paramfile, string logpath)
 {
 	_param_file = paramfile;
+	_log_path = logpath;
 }
 
 // Returns true if ok, false if bad
@@ -99,7 +100,6 @@ vector<float> MOMDPPlanner::action()
 	int max_a, num_vecs;
 	double V, max_V;
 
-	vector<float> command(3,0.0);
 
 	//loop
 	bool not_rotated = true;
@@ -158,10 +158,12 @@ vector<float> MOMDPPlanner::action()
 		}
 	}
 
-	//TODO: set the step_size somewhere
-	double step_size = 10.0;
+	/* Create the command and move the UAV */
+	double step_size = _search_size / _n;
+	vector<float> command(3,0.0);
 	command[0] = step_size*(_y - old_y);
 	command[1] = step_size*(_x - old_x);
+	_uav.move(command[1], command[0], 0.0);
 
 	return command;
 }

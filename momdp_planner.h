@@ -14,12 +14,15 @@ class AlphaVector
 class MOMDPPlanner : public MyPlanner
 {
 	public:
-		vector< vector<AlphaVector>> policy;
-		MOMDPPlanner(string paramfile);
+		/**
+		 * Constructor
+		 */
+		MOMDPPlanner(string paramfile, string logpath);
 		vector<float> action();
 		int initialize();
-		int _n;		// number of cells per side
-		vector<vector<float> > actions;
+
+		vector< vector<AlphaVector>> policy;	// alpha vectors
+		int _n;									// cells per side
 
 	private:
 		int _x;		//vehicle positions (in grid cells, not actual)
