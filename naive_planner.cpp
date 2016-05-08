@@ -145,6 +145,8 @@ vector<float> NaivePlanner::calc_next_command_variable(const double &bearing, co
 
 bool NaivePlanner::initialize() {
 	// nothing needs to be done for initialization.... this just needs to be here
+	
+	return true;
 }
 
 
