@@ -1,4 +1,5 @@
 #include "myplanner.h"
+#include "vehicle/diromni.h"
 
 /* for debug purposes */
 using std::cout;
