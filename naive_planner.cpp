@@ -24,7 +24,7 @@ using std::vector;
 
 
 NaivePlanner::NaivePlanner(std::string logfile_dir) : Planner(),
-_first_step(false)
+_first_step(true)
 {
 	_observed_bearing.clear();
 	_observed_rssi.clear();
@@ -42,7 +42,7 @@ NaivePlanner::~NaivePlanner() {
 
 void NaivePlanner::update_naive_observations() {
 
-	printf("[NAIVE] updating the naive observation\n");
+	printf("[NAIVE] updating the naive observation with bearing %f and max rssi %f\n", _bearing_max, _max_rssi);
 	fprintf(_logfile, "[NAIVE] updating the naive observation\n");
 
 	/* simply adding the most recent bearing and max rssi to the list of observations we've made */
@@ -116,6 +116,8 @@ vector<float> NaivePlanner::calc_next_command_variable(const double &bearing, co
 	float step = STEP_SMALL;
 	if (!_first_step) {
 		step = calculate_step_size();
+	} else {
+		_first_step = false;
 	}
 	_step_sizes.push_back(step);
 
