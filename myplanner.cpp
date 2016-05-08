@@ -1,7 +1,6 @@
 #include "myplanner.h"
 #include "vehicle/diromni.h"
 
-/* for debug purposes */
 using std::cout;
 using std::endl;
 
@@ -31,7 +30,7 @@ double MyPlanner::get_obs()
 	else if (stype == 1)
 		o = 0.0;	//TODO: let's add the other sensor...
 	else
-		std::cout << "ERROR: SENSOR TYPE UNRECOGNIZED" << std::endl;
+		planner_log << "ERROR: SENSOR TYPE UNRECOGNIZED" << endl;
 	return o;
 }
 
@@ -77,7 +76,6 @@ string MyPlanner::read_config(string paramfile)
  */
 int MyPlanner::read_param_line(string line, string path)
 {
-	//cout << "rpl = " << line << endl;
 	if (line.substr(0,1) == "#")	// line is a comment
 		return 0;
 
