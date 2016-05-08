@@ -122,24 +122,14 @@ double DF::O(double px, double py, double ph, double tx, double ty, int obs_bin,
 	double rel_bearing = ph - true_bearing(px, py, tx, ty);
 	int rel_int = (int)rel_bearing;
 	if (rel_int < 0)
-		rel_bearing += 360;
+		rel_int += 360;
 	if (rel_int >= 360)
-		rel_bearing -= 360;
-
-	//int rel_int = (int)rel_bearing;
+		rel_int -= 360;
 
 	if (dom->_stds[rel_int] == 0)
 		cout << "rel_int = " << rel_int;
 	Normal d(dom->_means[rel_int], dom->_stds[rel_int]);
 	return d.cdf(obs_bin+1) - d.cdf(obs_bin);
-
-	/*
-	pair<double, double> rbe = rel_bin_edges(ang_deg, obs_bin);
-	Normal d(0.0, bo->noise);
-	double prob = d.cdf(rbe.second) - d.cdf(rbe.first);
-	*/
-
-	//return prob;
 }
 
 
