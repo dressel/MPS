@@ -1,9 +1,8 @@
 #include "circle_planner.h"
 
 CirclePlanner::CirclePlanner(string paramfile, string logpath)
+	: MyPlanner(paramfile, logpath)
 {
-	_param_file = paramfile;
-	_log_path = logpath;
 }
 
 int CirclePlanner::initialize()

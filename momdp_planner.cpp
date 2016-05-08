@@ -11,10 +11,7 @@ AlphaVector::AlphaVector(int a, vector<float> vec)
 }
 
 MOMDPPlanner::MOMDPPlanner(string paramfile, string logpath)
-{
-	_param_file = paramfile;
-	_log_path = logpath;
-}
+	:MyPlanner(paramfile, logpath) {}
 
 // Returns true if ok, false if bad
 int MOMDPPlanner::initialize()

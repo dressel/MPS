@@ -3,13 +3,8 @@
 using std::endl;
 
 
-//GreedyPlanner::GreedyPlanner(Vehicle x, Filter *f, int n)
-	//_param_file = paramfile;
 GreedyPlanner::GreedyPlanner(string paramfile, string logpath)
-{
-	_param_file = paramfile;
-	_log_path = logpath;
-}
+	:MyPlanner(paramfile, logpath) {}
 
 int GreedyPlanner::initialize()
 {

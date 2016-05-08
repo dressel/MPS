@@ -9,6 +9,11 @@ using std::endl;
 MyPlanner::MyPlanner()
 {
 }
+MyPlanner::MyPlanner(string paramfile, string logpath)
+{
+	_param_file = paramfile;
+	_log_path = logpath;
+}
 
 
 

@@ -15,6 +15,7 @@ class MyPlanner : public Planner
 {
 	public:
 		MyPlanner();
+		MyPlanner(string paramfile, string logpath);
 		Vehicle _uav;
 		Filter *filter;
 		string _param_file;
