@@ -7,6 +7,11 @@ CirclePlanner::CirclePlanner(string paramfile)
 
 int CirclePlanner::initialize()
 {
+	/* Create the logging file */
+	planner_log.open(_log_path + "/planner_log.txt");
+	if (!planner_log.is_open())
+		return -1;
+
 	/* read the parameter file, logging any errors */
 	string path = read_config(_param_file);
 	if (path == "error")

@@ -18,6 +18,11 @@ MOMDPPlanner::MOMDPPlanner(string paramfile)
 // Returns true if ok, false if bad
 int MOMDPPlanner::initialize()
 {
+	/* Create the logging file */
+	planner_log.open(_log_path + "/planner_log.txt");
+	if (!planner_log.is_open())
+		return -1;
+
 	string path = read_config(_param_file);
 	if (path == "error")
 		return -1;

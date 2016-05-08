@@ -29,9 +29,6 @@ int GreedyPlanner::initialize()
 	{
 		planner_log << "\npre return\n";
 		return bo_initialize();
-		//bool temp =  bo_initialize();
-		//std::cout << "temp = " << temp << endl;
-		//bo_initialize();
 	}
 	if (s_type == 1)
 		return do_initialize();
