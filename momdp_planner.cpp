@@ -42,12 +42,26 @@ int MOMDPPlanner::initialize()
 	string o_path = path + "policy/alpha_obs.bin";
 	string v_path = path + "policy/alpha_vectors.bin";
 
-	ifstream a_file;
-	ifstream o_file;
-	ifstream v_file;
+	ifstream a_file, o_file, v_file;
 	a_file.open(a_path);
 	o_file.open(o_path);
 	v_file.open(v_path);
+	if (!a_file.is_open())
+	{
+		planner_log << "MOMDP claims action binary file DNE." << endl;
+		return -1;
+	}
+	if (!o_file.is_open())
+	{
+		planner_log << "MOMDP claims obs binary file DNE." << endl;
+		return -1;
+	}
+	if (!v_file.is_open())
+	{
+		planner_log << "MOMDP claims alpha vector file DNE." << endl;
+		return -1;
+	}
+
 	int i, a, o;
 	float v;
 	int s;
@@ -66,6 +80,11 @@ int MOMDPPlanner::initialize()
 		}
 		policy[o].push_back(AlphaVector(a, *temp)); //TODO new issues
 	}
+
+	/* close the files */
+	o_file.close();
+	a_file.close();
+	v_file.close();
 
 	return 0;
 }
