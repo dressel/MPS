@@ -23,6 +23,7 @@ class DF : public Filter
 		int update(Vehicle x, double o);
 		double mutual_information(Vehicle x, vector<double> xp);
 		void print_belief();
+		void print_belief(ofstream &os);
 		void initial_belief();
 		void reset();
 		// TODO move this guy, he shouldn't be here

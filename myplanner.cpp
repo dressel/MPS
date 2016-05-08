@@ -151,4 +151,5 @@ void MyPlanner::update_belief()
 {
 	double o = get_obs();
 	filter->update(_uav, o);
+	filter->print_belief(planner_log);
 }

@@ -71,7 +71,6 @@ int DF::update(Vehicle x, double o)
 			this->b[theta_x][theta_y] /= bp_sum;
 		}
 	}
-	//print_belief();
 	return ret_val;
 }
 
@@ -89,6 +88,25 @@ void DF::print_belief()
 		printf("%.2f\n", b[n-1][y]);
 	}
 	printf("\n");
+}
+
+void DF::print_belief(ofstream &os)
+{
+	int x, y;
+	os << std::setprecision(2);
+	os << std::fixed;
+	for (y = n-1; y >= 0; y--)
+	{
+		for (x = 0; x < (n-1); x++)
+		{
+			//printf("%.2f,", b[x][y]);
+			os << b[x][y] << ",";
+		}
+		os << b[n-1][y] << endl;
+		//printf("%.2f\n", b[n-1][y]);
+	}
+	os << endl;
+	//printf("\n");
 }
 
 
