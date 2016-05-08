@@ -73,8 +73,7 @@ int MOMDPPlanner::initialize()
 
 vector<float> MOMDPPlanner::action()
 {
-	double o = get_obs();
-	filter->update(_uav, o);
+	update_belief();
 
 	/* Convert 2-D belief into 1-D vector */
 	DF * f = static_cast<DF *>(this->filter);

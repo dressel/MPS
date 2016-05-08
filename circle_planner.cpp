@@ -26,8 +26,7 @@ int CirclePlanner::initialize()
 
 vector<float> CirclePlanner::action()
 {
-	double o = get_obs();
-	filter->update(_uav, o);
+	update_belief();
 
 	// ok, we've updated belief. Now pick action
 	float ax = -cos(_bearing_max * M_PI/180.0);

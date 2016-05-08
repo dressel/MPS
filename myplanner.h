@@ -25,6 +25,7 @@ class MyPlanner : public Planner
 		double get_obs();
 		virtual int initialize() {};
 		virtual vector<float> action() {};
+		void update_belief();
 
 	//protected:
 		int read_param_line(string line, string path);

@@ -34,11 +34,7 @@ int GreedyPlanner::initialize()
 
 vector<float> GreedyPlanner::action()
 {
-	/* determine observation and update belief */
-	double o = get_obs();
-	filter->update(_uav, o);
-
-	/* loop through all possible actions, selecting best */
+	update_belief();
 	return find_best_action();
 }
 

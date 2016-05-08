@@ -138,3 +138,9 @@ int MyPlanner::read_filter_line(string line)
 	this->filter = new DF(_search_size, filter_info);
 	return 0;
 }
+
+void MyPlanner::update_belief()
+{
+	double o = get_obs();
+	filter->update(_uav, o);
+}
