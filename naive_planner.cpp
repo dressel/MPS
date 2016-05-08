@@ -121,6 +121,9 @@ vector<float> NaivePlanner::calc_next_command_variable(const double &bearing, co
 	}
 	_step_sizes.push_back(step);
 
+	printf("[NAIVE] using step size %f\n", step);
+	fprintf(_logfile, "using step size %f\n", step);
+
 	printf("[NAIVE] calculating the next variable size command with input (%f, %f)\n", bearing, rssi);
 	fprintf(_logfile, "calculating the next variable size command with input (%f, %f)\n", bearing, rssi);
 
