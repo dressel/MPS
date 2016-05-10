@@ -140,7 +140,10 @@ int MyPlanner::read_sensor_line(string line, string path)
 	getline(ss, sub, ',');		// done twice to get second element
 	if (sub == "bo")
 	{
+		getline(ss, sub, ',');
+		double sensor_noise = stod(sub);
 		_uav.sensor = new BearingOnly();
+		_uav.sensor->noise = sensor_noise;
 		return 0;
 	}
 	if (sub == "do")
