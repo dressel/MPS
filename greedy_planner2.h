@@ -1,5 +1,5 @@
-#ifndef GREEDY_H_
-#define GREEDY_H_
+#ifndef GREEDY2_H_
+#define GREEDY2_H_
 
 #include "myplanner.h"
 
