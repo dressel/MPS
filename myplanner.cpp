@@ -14,6 +14,18 @@ MyPlanner::MyPlanner(string paramfile, string logpath)
 	_log_path = logpath;
 }
 
+/**
+ *
+ * Returns -1 (true) if failure, 0 otherwise.
+ */
+int MyPlanner::start_log()
+{
+	planner_log.open(_log_path + "/planner_log.txt");
+	if (!planner_log.is_open())
+		return -1;
+	return 0;
+}
+
 
 
 /**
@@ -70,6 +82,7 @@ string MyPlanner::read_config(string paramfile)
 	param_stream.close();
 	return path;
 }
+
 
 /**
  * Returns error if the line has some error in it

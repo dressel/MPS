@@ -8,8 +8,7 @@ CirclePlanner::CirclePlanner(string paramfile, string logpath)
 int CirclePlanner::initialize()
 {
 	/* Create the logging file */
-	planner_log.open(_log_path + "/planner_log.txt");
-	if (!planner_log.is_open())
+	if (start_log())
 		return -1;
 
 	/* read the parameter file, logging any errors */

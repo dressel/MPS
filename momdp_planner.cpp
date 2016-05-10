@@ -17,8 +17,7 @@ MOMDPPlanner::MOMDPPlanner(string paramfile, string logpath)
 int MOMDPPlanner::initialize()
 {
 	/* Create the logging file */
-	planner_log.open(_log_path + "/planner_log.txt");
-	if (!planner_log.is_open())
+	if (start_log())
 		return -1;
 
 	string path = read_config(_param_file);

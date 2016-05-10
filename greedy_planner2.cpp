@@ -9,8 +9,7 @@ GreedyPlanner2::GreedyPlanner2(string paramfile, string logpath)
 int GreedyPlanner2::initialize()
 {
 	/* Create the logging file */
-	planner_log.open(_log_path + "/planner_log.txt");
-	if (!planner_log.is_open())
+	if (start_log())
 		return -1;
 
 	string path = read_config(_param_file);
@@ -27,7 +26,6 @@ int GreedyPlanner2::initialize()
 	_n = f->n;
 	_cell_size = f->cell_size;
 
-	/* unrecognized sensor type, this should error out */
 	return 0;
 }
 

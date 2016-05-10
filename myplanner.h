@@ -26,6 +26,7 @@ class MyPlanner : public Planner
 		virtual int initialize() {};
 		virtual vector<float> action() {};
 		void update_belief();
+		int start_log();
 
 		/**
 		 * If there is an error, it will return the string "error"
