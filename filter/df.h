@@ -27,7 +27,7 @@ class DF : public Filter
 		void initial_belief();
 		void reset();
 		// TODO move this guy, he shouldn't be here
-		double true_bearing(double px, double py, double tx, double ty);
+		//double true_bearing(double px, double py, double tx, double ty);
 
 	private:
 		double fit_180(double angle);
