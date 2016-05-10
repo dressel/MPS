@@ -29,17 +29,11 @@ int GreedyPlanner2::initialize()
 	return 0;
 }
 
-vector<float> GreedyPlanner2::action()
-{
-	update_belief();
-	return find_best_action();
-}
-
 
 /**
  * Loops through all possible actions, selecting the best.
  */
-vector<float> GreedyPlanner2::find_best_action()
+vector<float> GreedyPlanner2::get_action()
 {
 	int xi, yi;
 	vector<double> xp;
@@ -66,7 +60,6 @@ vector<float> GreedyPlanner2::find_best_action()
 		}
 	}
 
-	// move the vehicle too
 	double dx = best_x - _uav.x;
 	double dy = best_y - _uav.y;
 	vector<float> command;
@@ -75,6 +68,5 @@ vector<float> GreedyPlanner2::find_best_action()
 	command[1] = dx;
 	command[2] = 0;
 
-	_uav.move(command);
 	return command;
 }

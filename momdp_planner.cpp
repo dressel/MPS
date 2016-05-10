@@ -89,10 +89,8 @@ int MOMDPPlanner::initialize()
 }
 
 
-vector<float> MOMDPPlanner::action()
+vector<float> MOMDPPlanner::get_action()
 {
-	update_belief();
-
 	/* Convert 2-D belief into 1-D vector */
 	DF * f = static_cast<DF *>(this->filter);
 	vector<float> b1d (_n*_n);
@@ -188,7 +186,6 @@ vector<float> MOMDPPlanner::action()
 	}
 	command[0] = step_size*(_y - old_y);
 	command[1] = step_size*(_x - old_x);
-	_uav.move(command[1], command[0], 0.0);
 
 	return command;
 }

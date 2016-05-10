@@ -23,10 +23,8 @@ int CirclePlanner::initialize()
 	return 0;
 }
 
-vector<float> CirclePlanner::action()
+vector<float> CirclePlanner::get_action()
 {
-	update_belief();
-
 	// ok, we've updated belief. Now pick action
 	float ax = -cos(_bearing_max * M_PI/180.0);
 	float ay = sin(_bearing_max * M_PI/180.0);
@@ -46,9 +44,6 @@ vector<float> CirclePlanner::action()
 	// preserve current action as last to check for direction
 	last[0] = ax;
 	last[1] = ay;
-
-	// We keep track of vehicle's movement here
-	_uav.move(ax, ay);
 
 	return commands;
 }
