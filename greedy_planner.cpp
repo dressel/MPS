@@ -18,7 +18,6 @@ int GreedyPlanner::initialize()
 
 	/* Initialization can depend on sensor type */
 	int s_type = _uav.sensor->type();
-	planner_log << "s type = " << s_type;
 	if (s_type == 0)
 		return bo_initialize();
 	if (s_type == 1)
