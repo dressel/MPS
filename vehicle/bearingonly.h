@@ -8,6 +8,7 @@ class BearingOnly : public Sensor
 	public:
 		int noise;
 		BearingOnly();
+		BearingOnly(double ns);
 		int type();
 };
 #endif

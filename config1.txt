@@ -2,4 +2,4 @@
 # Assumes a bearing only sensor
 search_size,100
 filter,df,11
-sensor,bo
+sensor,bo,13

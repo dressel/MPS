@@ -142,8 +142,7 @@ int MyPlanner::read_sensor_line(string line, string path)
 	{
 		getline(ss, sub, ',');
 		double sensor_noise = stod(sub);
-		_uav.sensor = new BearingOnly();
-		_uav.sensor->noise = sensor_noise;
+		_uav.sensor = new BearingOnly(sensor_noise);
 		return 0;
 	}
 	if (sub == "do")
