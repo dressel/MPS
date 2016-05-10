@@ -23,9 +23,13 @@ vector<float> MyPlanner::action()
 	return a;
 }
 
+void MyPlanner::print_obs(double o)
+{
+	planner_log << "obs = " << o << endl << endl;
+}
 void MyPlanner::print_action(vector<float> &a)
 {
-	planner_log << "COMMAND: (north,east,yaw) = " << a[0] << "," << a[1] << "," << a[2] << endl;
+	planner_log << "COMMAND: (north,east,yaw) = " << a[0] << "," << a[1] << "," << a[2] << endl << endl;
 }
 
 
@@ -178,6 +182,7 @@ int MyPlanner::read_filter_line(string line)
 void MyPlanner::update_belief()
 {
 	double o = get_obs();
+	print_obs(o);
 	filter->update(_uav, o);
 	filter->print_belief(planner_log);
 }

@@ -29,6 +29,7 @@ class MyPlanner : public Planner
 		void update_belief();
 		int start_log();
 		void print_action(vector<float> &a);
+		void print_obs(double o);
 
 		/**
 		 * If there is an error, it will return the string "error"
