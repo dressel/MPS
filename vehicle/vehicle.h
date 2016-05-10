@@ -31,5 +31,6 @@ class Vehicle
 		vector<double> new_pose(vector<float> &a);
 		void move(float ax, float ay);
 		void move(float ax, float ay, float ah);
+		void move(vector<float> &a);
 };
 #endif //VEHICLE_VEHICLE_H_
