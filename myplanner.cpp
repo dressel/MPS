@@ -14,12 +14,12 @@ MyPlanner::MyPlanner(string paramfile, string logpath)
 	_log_path = logpath;
 }
 
-vector<float> MyPlanner::action()
+Action MyPlanner::action()
 {
 	update_belief();
-	vector<float> a = get_action();
+	Action a = get_action();
 	print_action(a);
-	_uav.move(a);
+	_uav.move(a.east, a.north, a.yaw);
 	return a;
 }
 
@@ -27,6 +27,11 @@ void MyPlanner::print_obs(double o)
 {
 	planner_log << "obs = " << o << endl << endl;
 }
+void MyPlanner::print_action(Action a)
+{
+	planner_log << "COMMAND: (north,east,yaw) = " << a.north << "," << a.east << "," << a.yaw << endl << endl;
+}
+
 void MyPlanner::print_action(vector<float> &a)
 {
 	planner_log << "COMMAND: (north,east,yaw) = " << a[0] << "," << a[1] << "," << a[2] << endl << endl;

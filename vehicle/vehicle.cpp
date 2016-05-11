@@ -59,6 +59,7 @@ void Vehicle::move(vector<float> &a)
 	move(a[1], a[0], a[2]);
 }
 
+
 void Vehicle::set_xy()
 {
 	set_xy(limit/2.0, limit/2.0);

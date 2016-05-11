@@ -30,6 +30,7 @@ class MyPlanner : public Planner
 		int start_log();
 		void print_action(vector<float> &a);
 		void print_obs(double o);
+		void print_action(Action a);
 
 		/**
 		 * If there is an error, it will return the string "error"
