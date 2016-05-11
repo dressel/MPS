@@ -19,5 +19,6 @@ class Filter
 		virtual void print_belief() = 0;
 		virtual void print_belief(ofstream &os) = 0;
 		virtual double mutual_information(Vehicle x, vector<double> xp) = 0;
+		virtual double mutual_information(Vehicle x, int xr, int yr) = 0;
 };
 #endif

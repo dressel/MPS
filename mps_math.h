@@ -10,3 +10,6 @@ class Normal
 };
 
 double true_bearing(double px, double py, double tx, double ty);
+double true_bearing(double xr, double yr);
+
+double fit_180(double angle);

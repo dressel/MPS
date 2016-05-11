@@ -74,8 +74,36 @@ int DF::update(Vehicle x, double o)
 	return ret_val;
 }
 
-//TODO: is there a performance hit here?
-// it doesn't matter now, but it could later
+void DF::set_obs_probs(Sensor *s)
+{
+	/* first resize our vector */
+	int i, j;
+	int n21 = 2*n - 1;
+	obs_probs.resize(n21);
+	for (i = 0; i < n21; i++)
+	{
+		obs_probs[i].resize(n21);
+		for (j = 0; j < n21; j++)
+		{
+			obs_probs[i][j].resize(36);		// TODO: don't hardcode
+		}
+	}
+
+	int xr, yr, o;
+	for (xr = -n+1; xr < n; xr++)
+	{
+		for (yr = -n+1; yr < n; yr++)
+		{
+			for (o = 0; o < 36; o++)		//TODO: don't hardcode
+			{
+				obs_probs[xr+n-1][yr+n-1][o] = O_start(xr, yr, o, s);
+			}
+		}
+	}
+}
+
+
+
 void DF::print_belief()
 {
 	int x, y;
@@ -151,6 +179,43 @@ double DF::O(double px, double py, double ph, double tx, double ty, int obs_bin,
 }
 
 
+double DF::O(int xr, int yr, int obs_bin, Sensor *s)
+{
+	double prob = 0.0;
+	if (s->type() == 0)
+		return O(xr, yr, obs_bin, static_cast<BearingOnly *>(s));
+	if (s->type() == 1)
+		return 0.0;		//TODO: should really error out here
+		//return O(px, py, ph, tx, ty, obs_bin, static_cast<DirOmni *>(s));
+
+	return prob;
+}
+
+double DF::O(int xr, int yr, int obs_bin, BearingOnly *bo)
+{
+	/*
+	double ang_deg = true_bearing(xr*cell_size, yr*cell_size);
+	pair<double, double> rbe = rel_bin_edges(ang_deg, obs_bin);
+	Normal d(0.0, bo->noise);
+	double prob = d.cdf(rbe.second) - d.cdf(rbe.first);
+	*/
+	return obs_probs[xr+n-1][yr+n-1][obs_bin];
+}
+
+double DF::O_start(int xr, int yr, int obs_bin, Sensor *bo)
+{
+	return O_start(xr, yr, obs_bin, static_cast<BearingOnly *>(bo));
+}
+double DF::O_start(int xr, int yr, int obs_bin, BearingOnly *bo)
+{
+	double ang_deg = true_bearing(xr*cell_size, yr*cell_size);
+	pair<double, double> rbe = rel_bin_edges(ang_deg, obs_bin);
+	Normal d(0.0, bo->noise);
+	double prob = d.cdf(rbe.second) - d.cdf(rbe.first);
+	return prob;
+}
+
+
 /**
  * Finds the start and end points for the cdf.
  *
@@ -184,15 +249,6 @@ pair<double,double> DF::rel_bin_edges(double bearing, int obs_bin)
 	return pair <double, double> (rel_start, rel_end);
 }
 
-double DF::fit_180(double angle)
-{
-	if (angle > 180.0)
-		angle -= 360.0;
-	else if (angle < -180.0)
-		angle += 360.0;
-	return angle;
-
-}
 
 // Calculate start, end degrees of bin
 pair<double,double> DF::bin2deg(int obs_bin)
@@ -263,12 +319,30 @@ double DF::p_obs(Vehicle x, double xp, double yp, double hp, int ob)
 	}
 	return prob;
 }
+
+double DF::p_obs2(Vehicle x, int xv, int yv, int ob)
+{
+	double prob = 0.0;
+	int theta_x, theta_y;
+	int xr, yr;
+	for (theta_x = 0; theta_x < n; theta_x++)
+	{
+		xr = theta_x - xv;
+		for (theta_y = 0; theta_y < n; theta_y++)
+		{
+			yr = theta_y - yv;
+			prob += b[theta_x][theta_y] * O(xr, yr, ob, x.sensor);
+		}
+	}
+	return prob;
+}
+
 /**
  * Pose needs to be (x,y,heading)
  */
 double DF::mutual_information(Vehicle uav, vector<double> np)
 {
-	double prob = p_obs(uav, np[0], np[1], np[2], 0);
+	//double prob = p_obs(uav, np[0], np[1], np[2], 0);
 	double half_cell = cell_size / 2.0;
 
 	double H_o = 0.0;
@@ -292,6 +366,34 @@ double DF::mutual_information(Vehicle uav, vector<double> np)
 				yj = theta_y * cell_size + half_cell;
 
 				pot = O(np[0], np[1], np[2], xj, yj, obo, uav.sensor);
+				if (pot > 0.0)
+					H_o_t -= pot * b[theta_x][theta_y] * log(pot);
+			}
+		}
+	}
+	return H_o - H_o_t;
+}
+
+double DF::mutual_information(Vehicle uav, int xv, int yv)
+{
+	double H_o = 0.0;
+	double H_o_t = 0.0;
+	int ob, theta_x, theta_y, obo;
+	double po, pot, xj, yj;
+
+	for (ob = 0; ob < num_bins; ob++)
+	{
+		obo = ob + bin_offset;
+		po = p_obs2(uav, xv, yv, obo);
+		if (po > 0.0)
+			H_o -= po * log(po);
+
+		// sum over theta
+		for (theta_x = 0; theta_x < n; theta_x++)
+		{
+			for (theta_y = 0; theta_y < n; theta_y++)
+			{
+				pot = O(theta_x-xv, theta_y-yv, obo, uav.sensor);
 				if (pot > 0.0)
 					H_o_t -= pot * b[theta_x][theta_y] * log(pot);
 			}

@@ -35,6 +35,14 @@ int GreedyPlanner2::initialize()
  */
 vector<float> GreedyPlanner2::get_action()
 {
+	DF *f = static_cast<DF *>(filter);
+	if (f->obs_probs.size() > 0)
+		return get_action_fast();
+	return get_action_slow();
+}
+
+vector<float> GreedyPlanner2::get_action_slow()
+{
 	int xi, yi;
 	vector<double> xp;
 	double mi, best_mi, best_x, best_y, half_cell;
@@ -56,6 +64,38 @@ vector<float> GreedyPlanner2::get_action()
 				best_mi = mi;
 				best_x = xp[0];
 				best_y = xp[1];
+			}
+		}
+	}
+
+	double dx = best_x - _uav.x;
+	double dy = best_y - _uav.y;
+	vector<float> command;
+	command.resize(3);
+	command[0] = dy;
+	command[1] = dx;
+	command[2] = 0;
+
+	return command;
+}
+
+vector<float> GreedyPlanner2::get_action_fast()
+{
+	int xv, yv;
+	double mi, best_mi, best_x, best_y;
+	best_mi = -99999.0;
+
+
+	for (xv = 0; xv < _n; xv++)
+	{
+		for (yv = 0; yv < _n; yv++)
+		{
+			mi = filter->mutual_information(_uav, xv, yv);
+			if (mi > best_mi)
+			{
+				best_mi = mi;
+				best_x = xv*_cell_size;
+				best_y = yv*_cell_size;
 			}
 		}
 	}

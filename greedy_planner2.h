@@ -21,6 +21,8 @@ class GreedyPlanner2 : public MyPlanner
 		// TODO: function that prints out actions so we can see if correct
 
 		vector<float> get_action();
+		vector<float> get_action_slow();
+		vector<float> get_action_fast();
 		int _n;
 		double _cell_size;
 };
