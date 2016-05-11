@@ -1,5 +1,5 @@
 #
 # filter line must occur before sensor line
 search_size,100
-filter,df,10
+filter,df,21
 sensor,do

@@ -52,6 +52,8 @@ Action GreedyPlanner::get_action()
 
 	Action action{};
 	Action::set_relative_motion(&action, actions[best_i][0], actions[best_i][1]);
+	if (_uav.sensor->type() == 1)
+		Action::set_no_rotation(&action);
 
 	return action;
 }
