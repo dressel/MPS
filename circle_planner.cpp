@@ -8,8 +8,7 @@ CirclePlanner::CirclePlanner(string paramfile, string logpath)
 int CirclePlanner::initialize()
 {
 	/* Create the logging file */
-	planner_log.open(_log_path + "/planner_log.txt");
-	if (!planner_log.is_open())
+	if (start_log())
 		return -1;
 
 	/* read the parameter file, logging any errors */
@@ -24,10 +23,9 @@ int CirclePlanner::initialize()
 	return 0;
 }
 
-Action CirclePlanner::action()
-{
-	update_belief();
 
+Action CirclePlanner::get_action()
+{
 	// ok, we've updated belief. Now pick action
 	float ax = -cos(_bearing_max * M_PI/180.0);
 	float ay = sin(_bearing_max * M_PI/180.0);
@@ -53,9 +51,6 @@ Action CirclePlanner::action()
 	// preserve current action as last to check for direction
 	last[0] = ax;
 	last[1] = ay;
-
-	// We keep track of vehicle's movement here
-	_uav.move(ax, ay);
 
 	return action;
 }

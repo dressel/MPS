@@ -14,6 +14,37 @@ MyPlanner::MyPlanner(string paramfile, string logpath)
 	_log_path = logpath;
 }
 
+vector<float> MyPlanner::action()
+{
+	update_belief();
+	vector<float> a = get_action();
+	print_action(a);
+	_uav.move(a);
+	return a;
+}
+
+void MyPlanner::print_obs(double o)
+{
+	planner_log << "obs = " << o << endl << endl;
+}
+void MyPlanner::print_action(vector<float> &a)
+{
+	planner_log << "COMMAND: (north,east,yaw) = " << a[0] << "," << a[1] << "," << a[2] << endl << endl;
+}
+
+
+/**
+ *
+ * Returns -1 (true) if failure, 0 otherwise.
+ */
+int MyPlanner::start_log()
+{
+	planner_log.open(_log_path + "/planner_log.txt");
+	if (!planner_log.is_open())
+		return -1;
+	return 0;
+}
+
 
 
 /**
@@ -70,6 +101,7 @@ string MyPlanner::read_config(string paramfile)
 	param_stream.close();
 	return path;
 }
+
 
 /**
  * Returns error if the line has some error in it
@@ -150,6 +182,7 @@ int MyPlanner::read_filter_line(string line)
 void MyPlanner::update_belief()
 {
 	double o = get_obs();
+	print_obs(o);
 	filter->update(_uav, o);
 	filter->print_belief(planner_log);
 }

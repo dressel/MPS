@@ -1,16 +1,17 @@
-#ifndef GREEDY_H_
-#define GREEDY_H_
+#ifndef GREEDY2_H_
+#define GREEDY2_H_
 
 #include "myplanner.h"
 
-class GreedyPlanner : public MyPlanner
+class GreedyPlanner2 : public MyPlanner
 {
 	public:
 
 		/**
 		 * Constructor
 		 */
-		GreedyPlanner(string paramfile, string logfile);
+		GreedyPlanner2(string paramfile, string logfile);
+
 
 		/**
 		 * Returns true if an error occurred.
@@ -19,10 +20,8 @@ class GreedyPlanner : public MyPlanner
 
 		// TODO: function that prints out actions so we can see if correct
 
-	//private:
-		vector<vector<float> > actions;
 		Action get_action();
-		int bo_initialize();
-		int do_initialize();
+		int _n;
+		double _cell_size;
 };
 #endif

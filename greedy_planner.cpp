@@ -9,8 +9,7 @@ GreedyPlanner::GreedyPlanner(string paramfile, string logpath)
 int GreedyPlanner::initialize()
 {
 	/* Create the logging file */
-	planner_log.open(_log_path + "/planner_log.txt");
-	if (!planner_log.is_open())
+	if (start_log())
 		return -1;
 
 	string path = read_config(_param_file);
@@ -19,7 +18,6 @@ int GreedyPlanner::initialize()
 
 	/* Initialization can depend on sensor type */
 	int s_type = _uav.sensor->type();
-	planner_log << "s type = " << s_type;
 	if (s_type == 0)
 		return bo_initialize();
 	if (s_type == 1)
@@ -29,17 +27,10 @@ int GreedyPlanner::initialize()
 	return -1;
 }
 
-Action GreedyPlanner::action()
-{
-	update_belief();
-	return find_best_action();
-}
-
-
 /**
  * Loops through all possible actions, selecting the best.
  */
-Action GreedyPlanner::find_best_action()
+Action GreedyPlanner::get_action()
 {
 	int i, best_i;
 	vector<float> a;
@@ -59,6 +50,7 @@ Action GreedyPlanner::find_best_action()
 		}
 	}
 
+<<<<<<< HEAD
 	// move the vehicle too
 	_uav.move(actions[best_i][1], actions[best_i][0], actions[best_i][2]);
 
@@ -66,6 +58,9 @@ Action GreedyPlanner::find_best_action()
 	Action::set_relative_motion(&action, actions[best_i][0], actions[best_i][1]);
 
 	return action;
+=======
+	return actions[best_i];
+>>>>>>> origin
 }
 
 int GreedyPlanner::bo_initialize()

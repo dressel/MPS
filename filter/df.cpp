@@ -272,6 +272,9 @@ double DF::p_obs(Vehicle x, double xp, double yp, double hp, int ob)
 	}
 	return prob;
 }
+/**
+ * Pose needs to be (x,y,heading)
+ */
 double DF::mutual_information(Vehicle uav, vector<double> np)
 {
 	double prob = p_obs(uav, np[0], np[1], np[2], 0);

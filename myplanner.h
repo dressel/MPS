@@ -24,8 +24,12 @@ class MyPlanner : public Planner
 		ofstream planner_log;
 		double _search_size;
 		virtual int initialize() {};
-		virtual Action action() {};
+		Action action();
+		virtual Action get_action() {};
 		void update_belief();
+		int start_log();
+		void print_action(vector<float> &a);
+		void print_obs(double o);
 
 		/**
 		 * If there is an error, it will return the string "error"

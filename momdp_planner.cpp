@@ -17,8 +17,7 @@ MOMDPPlanner::MOMDPPlanner(string paramfile, string logpath)
 int MOMDPPlanner::initialize()
 {
 	/* Create the logging file */
-	planner_log.open(_log_path + "/planner_log.txt");
-	if (!planner_log.is_open())
+	if (start_log())
 		return -1;
 
 	string path = read_config(_param_file);
@@ -28,7 +27,7 @@ int MOMDPPlanner::initialize()
 	/* check that the filter is of  the correct type */
 	if (this->filter->type != 0)
 	{
-		planner_log << "MOMDP expects a bearing only sensor" << endl;
+		planner_log << "MOMDP expects a discrete filter." << endl;
 		return -1;
 	}
 	DF * f = static_cast<DF *>(this->filter);
@@ -90,10 +89,8 @@ int MOMDPPlanner::initialize()
 }
 
 
-Action MOMDPPlanner::action()
+Action MOMDPPlanner::get_action()
 {
-	update_belief();
-
 	/* Convert 2-D belief into 1-D vector */
 	DF * f = static_cast<DF *>(this->filter);
 	vector<float> b1d (_n*_n);
@@ -193,7 +190,6 @@ Action MOMDPPlanner::action()
 	}
 	command[0] = step_size*(_y - old_y);
 	command[1] = step_size*(_x - old_x);
-	_uav.move(command[1], command[0], 0.0);
 
 	Action action{};
 	Action::set_relative_motion(&action, command[0], command[1]);
