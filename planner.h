@@ -95,10 +95,10 @@ public:
 	 * @param d_east  the relative east translation
 	 */
 	static void set_relative_motion(Action *action, float d_north, float d_east) {
-		(*action).north = d_north;
-		(*action).east = d_east;
-		(*action.flags) |= (Action::FLAG_NORTH_RELATIVE | Action::FLAG_EAST_RELATIVE);
-		(*action.valid) |= (Action::VALID_NORTH | Action::VALID_EAST);
+		action->north = d_north;
+		action->east = d_east;
+		action->flags |= (Action::FLAG_NORTH_RELATIVE | Action::FLAG_EAST_RELATIVE);
+		action->valid |= (Action::VALID_NORTH | Action::VALID_EAST);
 		return;
 	}
 
@@ -110,11 +110,11 @@ public:
 	 * @param d_yaw   the relative yaw motion
 	 */
 	static void set_relative_motion(Action *action, float d_north, float d_east, float d_yaw) {
-		(*action).north = d_north;
-		(*action).east = d_east;
-		(*action).yaw = d_yaw;
-		(*action.flags) |= (Action::FLAG_NORTH_RELATIVE | Action::FLAG_EAST_RELATIVE | Action::FLAG_YAW_RELATIVE);
-		(*action.valid) |= (Action::VALID_NORTH | Action::VALID_EAST | Action::VALID_YAW);
+		action->north = d_north;
+		action->east = d_east;
+		action->yaw = d_yaw;
+		action->flags |= (Action::FLAG_NORTH_RELATIVE | Action::FLAG_EAST_RELATIVE | Action::FLAG_YAW_RELATIVE);
+		action->valid |= (Action::VALID_NORTH | Action::VALID_EAST | Action::VALID_YAW);
 		return;
 	}
 
@@ -125,9 +125,9 @@ public:
 	 * @param yaw    the relative yaw motion
 	 */
 	static void set_yaw_relative(Action *action, float yaw) {
-		(*action).yaw = yaw;
-		(*action.flags) |= (Action::FLAG_YAW_RELATIVE);
-		(*action.valid) |= (Action::VALID_YAW);
+		action->yaw = yaw;
+		action->flags |= (Action::FLAG_YAW_RELATIVE);
+		action->valid |= (Action::VALID_YAW);
 	}
 
 	/**
@@ -135,8 +135,8 @@ public:
 	 * @param action the action to fill
 	 */
 	static void set_no_rotation(Action *action) {
-		(*action).rotation_angle = 0.0;
-		(*action.valid) |= (Action::VALID_ROTATION_ANGLE);
+		action->rotation_angle = 0.0;
+		action->valid |= (Action::VALID_ROTATION_ANGLE);
 	}
 
 	/**
@@ -148,14 +148,14 @@ public:
 	 * @param altitude the absolute (AMSL) altitude
 	 */
 	static void set_basic_motion(Action *action, float d_north, float d_east, float yaw, float altitude) {
-		set_motion_relative(action, d_north, d_east);
-		(*action).yaw = yaw;
-		(*action).flags |= Action::FLAG_YAW_ABSOLUTE;
-		(*action).valid |= Action::VALID_YAW;
+		set_relative_motion(action, d_north, d_east);
+		action->yaw = yaw;
+		action->flags |= Action::FLAG_YAW_ABSOLUTE;
+		action->valid |= Action::VALID_YAW;
 
-		(*action).altitude = altitude;
-		(*action).flags |= Action::FLAG_ALTITUDE_ABSOLUTE;
-		(*action).valid |= Action::VALID_ALTITUDE;
+		action->altitude = altitude;
+		action->flags |= Action::FLAG_ALTITUDE_ABSOLUTE;
+		action->valid |= Action::VALID_ALTITUDE;
 			
 	}
 
