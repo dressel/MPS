@@ -134,7 +134,7 @@ Action NaivePlanner::calc_next_command_variable(const double &bearing, const dou
 	float east = step * sin(bearing * M_PI/180.0);
 
 	Action action{};
-	Action::set_motion_relative(&action, north, east);
+	Action::set_relative_motion(&action, north, east);
 
 	return action;
 }

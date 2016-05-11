@@ -48,7 +48,7 @@ Action CirclePlanner::action()
 	*/
 
 	Action action{};
-	Action::set_motion_relative(&action, _uav.max_step * ay, _uav.max_step * ax);
+	Action::set_relative_motion(&action, _uav.max_step * ay, _uav.max_step * ax);
 
 	// preserve current action as last to check for direction
 	last[0] = ax;

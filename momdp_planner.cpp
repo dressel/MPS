@@ -185,7 +185,11 @@ Action MOMDPPlanner::action()
 		planner_log << "Search Complete." << endl;
 		command[0] = -1000.0;
 		command[1] = -1000.0;
-		return command;
+
+		Action action{};
+		Action::set_relative_motion(&action, command[0], command[1]);
+
+		return action;
 	}
 	command[0] = step_size*(_y - old_y);
 	command[1] = step_size*(_x - old_x);
