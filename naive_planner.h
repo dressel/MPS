@@ -43,7 +43,7 @@ public:
 	 * determins the next action to take.
 	 * @return  vector of <dNorth, dEast, dYaw> action values
 	 */
-	vector<float> action();
+	Action action();
 
 private:
 

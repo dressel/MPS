@@ -24,7 +24,7 @@ class MyPlanner : public Planner
 		ofstream planner_log;
 		double _search_size;
 		virtual int initialize() {};
-		virtual vector<float> action() {};
+		virtual Action action() {};
 		void update_belief();
 
 		/**

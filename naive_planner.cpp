@@ -111,7 +111,7 @@ vector<float> NaivePlanner::calc_next_command(const double &bearing, const doubl
 }
 
 
-vector<float> NaivePlanner::calc_next_command_variable(const double &bearing, const double &rssi) {
+Action NaivePlanner::calc_next_command_variable(const double &bearing, const double &rssi) {
 
 	float step = STEP_SMALL;
 	if (!_first_step) {
@@ -133,12 +133,10 @@ vector<float> NaivePlanner::calc_next_command_variable(const double &bearing, co
 	float north = step * cos(bearing * M_PI/180.0);
 	float east = step * sin(bearing * M_PI/180.0);
 
-	commands.push_back(north);	// dNorth
-	commands.push_back(east);	// dEast
-	commands.push_back(0.0);		// dYaw
-	commands.push_back(0.0);		// altitude
+	Action action{};
+	Action::set_motion_relative(&action, north, east);
 
-	return commands;
+	return action;
 }
 
 // the virtual function implementations
@@ -150,7 +148,7 @@ int NaivePlanner::initialize() {
 }
 
 
-vector<float> NaivePlanner::action() {
+Action NaivePlanner::action() {
 	// use the most recently calculated bearing and max rssi to update the internal lists
 	update_naive_observations();
 

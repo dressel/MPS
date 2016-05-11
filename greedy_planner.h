@@ -15,9 +15,9 @@ class GreedyPlanner : public MyPlanner
 		/**
 		 * Required function to direct vehicle.
 		 *
-		 * Returns a 3-element vector of floats: (d_north, d_east, d_yaw).
+		 * Returns a relative motion action (dNorth, dEast)
 		 */
-		vector<float> action();
+		Action action();
 
 		/**
 		 * Returns true if an error occurred.

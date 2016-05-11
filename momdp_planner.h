@@ -18,7 +18,7 @@ class MOMDPPlanner : public MyPlanner
 		 * Constructor
 		 */
 		MOMDPPlanner(string paramfile, string logpath);
-		vector<float> action();
+		Action action();
 		int initialize();
 
 		vector< vector<AlphaVector>> policy;	// alpha vectors

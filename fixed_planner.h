@@ -46,7 +46,7 @@ public:
 	 * return the next command.
 	 * @return  the command
 	 */
-	vector<float> action();
+	Action action();
 
 private:
 

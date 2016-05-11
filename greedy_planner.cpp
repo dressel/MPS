@@ -29,7 +29,7 @@ int GreedyPlanner::initialize()
 	return -1;
 }
 
-vector<float> GreedyPlanner::action()
+Action GreedyPlanner::action()
 {
 	update_belief();
 	return find_best_action();
@@ -61,7 +61,11 @@ vector<float> GreedyPlanner::find_best_action()
 
 	// move the vehicle too
 	_uav.move(actions[best_i][1], actions[best_i][0], actions[best_i][2]);
-	return actions[best_i];
+
+	Action action{};
+	Action::set_relative_motion(action[best_i][0], action[best_i][1]);
+
+	return action;
 }
 
 int GreedyPlanner::bo_initialize()

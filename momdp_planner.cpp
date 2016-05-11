@@ -90,7 +90,7 @@ int MOMDPPlanner::initialize()
 }
 
 
-vector<float> MOMDPPlanner::action()
+Action MOMDPPlanner::action()
 {
 	update_belief();
 
@@ -190,6 +190,9 @@ vector<float> MOMDPPlanner::action()
 	command[0] = step_size*(_y - old_y);
 	command[1] = step_size*(_x - old_x);
 	_uav.move(command[1], command[0], 0.0);
+
+	Action action{};
+	Action::set_relative_motion(command[0], command[1]);
 
 	return command;
 }

@@ -8,7 +8,7 @@ class CirclePlanner : public MyPlanner
 	public:
 		CirclePlanner(string paramfile, string logpath);
 		int initialize();
-		vector<float> action();
+		Action action();
 		vector<float> last;
 };
 #endif

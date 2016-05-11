@@ -87,7 +87,7 @@ int FixedPlanner::initialize() {
 }
 
 
-vector<float> FixedPlanner::action() {
+Action FixedPlanner::action() {
 
 	// cycle the cmds (ids should go from 0 -> 3)
 	if (_cmd_index >= _num_cmds) {
@@ -108,13 +108,10 @@ vector<float> FixedPlanner::action() {
 
 	_cmd_index++;
 
-	vector<float> next_command;
-	next_command.clear();
-	next_command.push_back(nextNorth);
-	next_command.push_back(nextEast);
-	next_command.push_back(nextYaw);
-	next_command.push_back(nextAlt);
+
+	Action action = {};
+	Action::set_basic_motion(&action, nextNorth, nextEast, nextYaw, nextAlt);
 
 	// return the next command to be used
-	return next_command;
+	return action;
 }

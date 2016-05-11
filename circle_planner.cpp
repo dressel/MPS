@@ -24,7 +24,7 @@ int CirclePlanner::initialize()
 	return 0;
 }
 
-vector<float> CirclePlanner::action()
+Action CirclePlanner::action()
 {
 	update_belief();
 
@@ -39,10 +39,16 @@ vector<float> CirclePlanner::action()
 		ax = -ax;
 		ay = -ay;
 	}
+
+	/*
 	vector<float>commands (3);
 	commands[0] = _uav.max_step * ay;
 	commands[1] = _uav.max_step * ax;
 	commands[2] = 0.0;
+	*/
+
+	Action action{};
+	Action::set_motion_relative(&action, _uav.max_step * ay, _uav.max_step * ax);
 
 	// preserve current action as last to check for direction
 	last[0] = ax;
@@ -51,5 +57,5 @@ vector<float> CirclePlanner::action()
 	// We keep track of vehicle's movement here
 	_uav.move(ax, ay);
 
-	return commands;
+	return action;
 }
