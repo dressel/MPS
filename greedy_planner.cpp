@@ -50,17 +50,10 @@ Action GreedyPlanner::get_action()
 		}
 	}
 
-<<<<<<< HEAD
-	// move the vehicle too
-	_uav.move(actions[best_i][1], actions[best_i][0], actions[best_i][2]);
-
 	Action action{};
 	Action::set_relative_motion(&action, actions[best_i][0], actions[best_i][1]);
 
 	return action;
-=======
-	return actions[best_i];
->>>>>>> origin
 }
 
 int GreedyPlanner::bo_initialize()
