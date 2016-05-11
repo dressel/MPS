@@ -39,7 +39,7 @@ Action GreedyPlanner::action()
 /**
  * Loops through all possible actions, selecting the best.
  */
-vector<float> GreedyPlanner::find_best_action()
+Action GreedyPlanner::find_best_action()
 {
 	int i, best_i;
 	vector<float> a;
