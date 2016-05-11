@@ -1,5 +1,7 @@
 # First configuration
 # Assumes a bearing only sensor
 search_size,100
+# filter,type,num_cells
 filter,df,21
-sensor,bo,13
+sensor,bo,13,0=slow,1=fast
+#sensor,bo,13,0

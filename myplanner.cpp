@@ -143,6 +143,12 @@ int MyPlanner::read_sensor_line(string line, string path)
 		getline(ss, sub, ',');
 		double sensor_noise = stod(sub);
 		_uav.sensor = new BearingOnly(sensor_noise);
+		getline(ss, sub, ',');
+		if (stoi(sub) == 1)
+		{
+			DF *f = static_cast<DF *>(filter);
+			f->set_obs_probs(_uav.sensor);
+		}
 		return 0;
 	}
 	if (sub == "do")
