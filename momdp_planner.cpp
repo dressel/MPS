@@ -198,5 +198,5 @@ Action MOMDPPlanner::action()
 	Action action{};
 	Action::set_relative_motion(&action, command[0], command[1]);
 
-	return command;
+	return action;
 }

@@ -79,7 +79,7 @@ private:
 	 * calculate the next command with a variable step size
 	 * @return  the command
 	 */
-	vector<float> calc_next_command_variable(const double &bearing, const double &rssi);
+	Action calc_next_command_variable(const double &bearing, const double &rssi);
 };
 
 #endif	/* _NAIVE_PLANNER_H_ */
