@@ -63,7 +63,7 @@ vector<float> GreedyPlanner::find_best_action()
 	_uav.move(actions[best_i][1], actions[best_i][0], actions[best_i][2]);
 
 	Action action{};
-	Action::set_relative_motion(actions[best_i][0], actions[best_i][1]);
+	Action::set_relative_motion(&action, actions[best_i][0], actions[best_i][1]);
 
 	return action;
 }

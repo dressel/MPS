@@ -28,7 +28,7 @@ class GreedyPlanner : public MyPlanner
 
 	//private:
 		vector<vector<float> > actions;
-		vector<float> find_best_action();
+		Action find_best_action();
 		int bo_initialize();
 		int do_initialize();
 };

@@ -192,7 +192,7 @@ Action MOMDPPlanner::action()
 	_uav.move(command[1], command[0], 0.0);
 
 	Action action{};
-	Action::set_relative_motion(command[0], command[1]);
+	Action::set_relative_motion(&action, command[0], command[1]);
 
 	return command;
 }
