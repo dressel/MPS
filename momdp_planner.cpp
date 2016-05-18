@@ -27,7 +27,7 @@ int MOMDPPlanner::initialize()
 	/* check that the filter is of  the correct type */
 	if (this->filter->type != 0)
 	{
-		planner_log << "MOMDP expects a discrete filter." << endl;
+		fprintf(_plannerlog, "MOMDP expects a discrete filter.\n");
 		return -1;
 	}
 	DF * f = static_cast<DF *>(this->filter);
@@ -47,17 +47,17 @@ int MOMDPPlanner::initialize()
 	v_file.open(v_path);
 	if (!a_file.is_open())
 	{
-		planner_log << "MOMDP claims action binary file DNE." << endl;
+		fprintf(_plannerlog, "MOMDP claims action binary file DNE.\n");
 		return -1;
 	}
 	if (!o_file.is_open())
 	{
-		planner_log << "MOMDP claims obs binary file DNE." << endl;
+		fprintf(_plannerlog, "MOMDP claims obs binary file DNE.\n");
 		return -1;
 	}
 	if (!v_file.is_open())
 	{
-		planner_log << "MOMDP claims alpha vector file DNE." << endl;
+		fprintf(_plannerlog, "MOMDP claims alpha vector file DNE.\n");
 		return -1;
 	}
 
@@ -179,7 +179,7 @@ Action MOMDPPlanner::get_action()
 	vector<float> command(3,0.0);
 	if (finished)
 	{
-		planner_log << "Search Complete." << endl;
+		fprintf(_plannerlog, "MOMDP reports search is complete.\n");
 		command[0] = -1000.0;
 		command[1] = -1000.0;
 

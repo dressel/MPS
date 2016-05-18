@@ -9,7 +9,6 @@
 
 using std::string;
 using std::ifstream;
-using std::ofstream;
 using std::stringstream;
 
 class MyPlanner : public Planner
@@ -21,7 +20,7 @@ class MyPlanner : public Planner
 		Filter *filter;
 		string _param_file;
 		string _log_path;
-		ofstream planner_log;
+		FILE *_plannerlog;
 		double _search_size;
 		virtual int initialize() {};
 		Action action();

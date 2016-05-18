@@ -17,6 +17,7 @@ class Filter
 		int type;
 		virtual int update(Vehicle x, double o) = 0;
 		virtual void print_belief() = 0;
+		virtual void print_belief(FILE *outfile) = 0;
 		virtual void print_belief(ofstream &os) = 0;
 		virtual double mutual_information(Vehicle x, vector<double> xp) = 0;
 };

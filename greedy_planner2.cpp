@@ -19,7 +19,8 @@ int GreedyPlanner2::initialize()
 	/* check that the filter is of  the correct type */
 	if (this->filter->type != 0)
 	{
-		planner_log << "Greedy2 expects a discrete filter." << endl;
+		//planner_log << "Greedy2 expects a discrete filter." << endl;
+		fprintf(_plannerlog, "Greedy2 expects a discrete filter.\n");
 		return -1;
 	}
 	DF * f = static_cast<DF *>(this->filter);

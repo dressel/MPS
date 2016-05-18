@@ -25,16 +25,16 @@ Action MyPlanner::action()
 
 void MyPlanner::print_obs(double o)
 {
-	planner_log << "obs = " << o << endl << endl;
+	fprintf(_plannerlog, "obs = %.2f\n", o);
 }
 void MyPlanner::print_action(Action a)
 {
-	planner_log << "COMMAND: (north,east,yaw) = " << a.north << "," << a.east << "," << a.yaw << endl << endl;
+	fprintf(_plannerlog, "COMMAND: (north,east,yaw) = %.2f,%.2f,%.2f\n", a.north, a.east, a.yaw);
 }
 
 void MyPlanner::print_action(vector<float> &a)
 {
-	planner_log << "COMMAND: (north,east,yaw) = " << a[0] << "," << a[1] << "," << a[2] << endl << endl;
+	//planner_log << "COMMAND: (north,east,yaw) = " << a[0] << "," << a[1] << "," << a[2] << endl << endl;
 }
 
 
@@ -44,9 +44,13 @@ void MyPlanner::print_action(vector<float> &a)
  */
 int MyPlanner::start_log()
 {
-	planner_log.open(_log_path + "/planner_log.txt");
-	if (!planner_log.is_open())
+	string temp = _log_path + "/planner_log.txt";
+	_plannerlog = fopen(temp.c_str(), "a");
+	if (_plannerlog == NULL)
+	{
+		// error opening file
 		return -1;
+	}
 	return 0;
 }
 
@@ -62,11 +66,17 @@ double MyPlanner::get_obs()
 	double o = 0.0;
 	int stype = _uav.sensor->type();
 	if (stype == 0)
+	{
 		o = _bearing_max;
+	}
 	else if (stype == 1)
+	{
 		o = 0.0;	//TODO: let's add the other sensor...
+	}
 	else
-		planner_log << "ERROR: SENSOR TYPE UNRECOGNIZED" << endl;
+	{
+		fprintf(_plannerlog, "ERROR: SENSOR TYPE UNRECOGNIZED\n");
+	}
 	return o;
 }
 
@@ -81,7 +91,7 @@ string MyPlanner::read_config(string paramfile)
 	param_stream.open(paramfile);
 	if (!param_stream.is_open())
 	{
-		planner_log << "FAILURE TO OPEN PLANNER CONFIGURATION FILE." <<endl;
+		fprintf(_plannerlog, "FAILURE TO OPEN PLANNER CONFIG FILE.\n");
 		return "error";
 	}
 
@@ -160,7 +170,7 @@ int MyPlanner::read_sensor_line(string line, string path)
 		return e_flag;
 	}
 
-	planner_log << "Failed to recognize requested sensor." << endl;
+	fprintf(_plannerlog, "Failed to recognize requested sensor.\n");
 	return -1;
 }
 
@@ -180,7 +190,7 @@ int MyPlanner::read_filter_line(string line)
 		return 0;
 	}
 
-	planner_log << "Failed to recognize requested filter." << endl;
+	fprintf(_plannerlog, "Failed to recognize requested filter.\n");
 	return -1;
 }
 
@@ -189,5 +199,5 @@ void MyPlanner::update_belief()
 	double o = get_obs();
 	print_obs(o);
 	filter->update(_uav, o);
-	filter->print_belief(planner_log);
+	filter->print_belief(_plannerlog);
 }
