@@ -101,14 +101,15 @@ string MyPlanner::read_config_safe(string paramfile)
 	int num_chars = paramfile.find_last_of("/") + 1;
 	string path = paramfile.substr(0, num_chars);
 
-	//_search_size = 100.0;
-	//_uav.set_limit(_search_size);
-	//_uav.set_xy();
-	//_uav.set_max_step(10.0);	
+	_search_size = 100.0;
+	_uav.set_limit(_search_size);
+	_uav.set_xy();
+	_uav.heading = 0.0;
+	_uav.set_max_step(10.0);	
 	
 	// TODO: do this correctly
 	// the below seems to hang when I leave it be
-	filter = new DF(_search_size, 11);
+	filter = new DF(_search_size, 41);
 
 	// the below seems to work.
 	_uav.sensor = new BearingOnly();
@@ -140,6 +141,7 @@ string MyPlanner::read_config(string paramfile)
 	
 	bool err_flag;
 	
+	/*
 	while( !getline(param_stream, line).eof() )
 	{
 		err_flag = read_param_line(line, path);
@@ -149,9 +151,10 @@ string MyPlanner::read_config(string paramfile)
 			return "error";
 		}
 	}
+	*/
 	
 	
-	//read_config_safe(paramfile);
+	read_config_safe(paramfile);
 
 
 	/* close the stream and return the path of configuration files */
