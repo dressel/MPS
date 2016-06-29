@@ -10,6 +10,16 @@ AlphaVector::AlphaVector(int a, vector<float> vec)
 	this->vec = vec;
 }
 
+
+
+AlphaVector::AlphaVector(int a)
+{
+	this->a = a;
+	//this->vec;
+}
+
+
+
 MOMDPPlanner::MOMDPPlanner(string paramfile, string logpath)
 	:MyPlanner(paramfile, logpath) {}
 
@@ -34,57 +44,150 @@ int MOMDPPlanner::initialize()
 	_n = f->n;
 	int n2 = _n*_n;
 	policy.resize(n2);
+	int rarkeet;
+	for (rarkeet = 0; rarkeet < n2; rarkeet++)
+	{
+		policy[rarkeet].clear();
+	}
 	_x = _n/2;
 	_y = _n/2;
 
+	// Create ifstreams to read in alpha vectors
+	fprintf(_plannerlog, "here1\n");
+	fflush(_plannerlog);
 	string a_path = path + "policy/alpha_actions.bin";
 	string o_path = path + "policy/alpha_obs.bin";
 	string v_path = path + "policy/alpha_vectors.bin";
-
-	ifstream a_file, o_file, v_file;
-	a_file.open(a_path);
-	o_file.open(o_path);
-	v_file.open(v_path);
-	if (!a_file.is_open())
+	//ifstream a_file, o_file, v_file;
+	//ifstream a_file;
+	//FILE *o_file;
+	//a_file.open(a_path);
+	//o_file.open(o_path);
+	//v_file.open(v_path);
+	FILE *a_file = fopen(a_path.c_str(), "r");
+	FILE *o_file = fopen(o_path.c_str(), "r");
+	FILE *v_file = fopen(v_path.c_str(), "r");
+	if (o_file == NULL)
 	{
-		fprintf(_plannerlog, "MOMDP claims action binary file DNE.\n");
+		fprintf(_plannerlog, "issue reading acts\n");
+		fflush(_plannerlog);
 		return -1;
 	}
-	if (!o_file.is_open())
+	if (o_file == NULL)
 	{
-		fprintf(_plannerlog, "MOMDP claims obs binary file DNE.\n");
+		fprintf(_plannerlog, "issue reading obs\n");
+		fflush(_plannerlog);
 		return -1;
 	}
-	if (!v_file.is_open())
+	if (v_file == NULL)
 	{
-		fprintf(_plannerlog, "MOMDP claims alpha vector file DNE.\n");
+		fprintf(_plannerlog, "issue reading val file\n");
+		fflush(_plannerlog);
 		return -1;
 	}
+	/*
+	if (check_momdp_streams(a_file, o_file, v_file))
+	{
+		return -1;
+	}
+	*/
+	fprintf(_plannerlog, "here2\n");
+	fflush(_plannerlog);
 
 	int i, a, o;
 	float v;
 	int s;
-	vector<float>* temp;
-	while (!a_file.eof())
+	//vector<float>* temp;
+	vector<float> temp(n2);
+	int rar = 0;
+	//while (!a_file.eof())
+	while ( fread(&a, 8, 1, a_file) == 1)
 	{
-		a_file.read(reinterpret_cast<char*>(&a), sizeof(int));
-		o_file.read(reinterpret_cast<char*>(&o), sizeof(int));
+		if (a >= 10)
+			printf("a = %d\n", a);
+	
+		//printf("a = %d\n", a);
+		//a_file.read(reinterpret_cast<char*>(&a), sizeof(int));
+		//fread(&a, 8, 1, a_file);
+		//o_file.read(reinterpret_cast<char*>(&o), sizeof(int));
+		//o_file.read(&o, sizeof(int));
+		//fread(&o, 8, 1, o_file);
+		/*
+		if (o >= n2)
+		{
+			printf("rarity!!\n");
+		}
+		*/
+		o = 0;
 
 		//create a temporary vector
+		/*
 		temp = new vector<float>(n2);
 		for (s = 0; s < n2; s++)
 		{
 			v_file.read(reinterpret_cast<char*>(&v), sizeof(float));
 			(*temp)[s] = v;
 		}
-		policy[o].push_back(AlphaVector(a, *temp)); //TODO new issues
+		policy[o].push_back(AlphaVector(a,*temp)); //TODO new issues
+		*/
+		//AlphaVector av = AlphaVector(a);
+		//temp = vector<float>(n2);
+		
+		for (s = 0; s < n2; s++)
+		{
+			//v_file.read(reinterpret_cast<char*>(&v), sizeof(float));
+			//fread(&v, 4, 1, v_file);
+			v = 17.;
+			temp[s] = v;
+		}
+		
+		// I don't think the following works
+		//policy[o].push_back(AlphaVector(a,temp)); //TODO new issues
+		//policy[o].push_back(AlphaVector(a)); //TODO new issues
+		policy[0].push_back(AlphaVector(a)); //TODO new issues
+		rar++;
 	}
+	
+	fprintf(_plannerlog, "here3\n");
+	fflush(_plannerlog);
+
+	fprintf(_plannerlog, "rar = %d\n", rar);
+	fflush(_plannerlog);
 
 	/* close the files */
-	o_file.close();
-	a_file.close();
-	v_file.close();
+	fclose(a_file);
+	fclose(o_file);
+	fclose(v_file);
+	//o_file.close();
+	//a_file.close();
+	//v_file.close();
 
+	fprintf(_plannerlog, "here5\n");
+	fflush(_plannerlog);
+
+	return 0;
+}
+
+int MOMDPPlanner::check_momdp_streams(ifstream &a_file, ifstream &o_file, ifstream &v_file)
+{
+	if (!a_file.is_open())
+	{
+		fprintf(_plannerlog, "MOMDP claims action binary file DNE.\n");
+		fflush(_plannerlog);
+		return -1;
+	}
+	if (!o_file.is_open())
+	{
+		fprintf(_plannerlog, "MOMDP claims obs binary file DNE.\n");
+		fflush(_plannerlog);
+		return -1;
+	}
+	if (!v_file.is_open())
+	{
+		fprintf(_plannerlog, "MOMDP claims alpha vector file DNE.\n");
+		fflush(_plannerlog);
+		return -1;
+	}
 	return 0;
 }
 

@@ -79,6 +79,8 @@ int GreedyPlanner::bo_initialize()
 	actions[num_angles][1] = 0.0;
 	actions[num_angles][2] = 0.0;
 
+	fprintf(_plannerlog, "GreedyPlanner initialized.\n");
+	fflush(_plannerlog);
 	return 0;
 }
 
@@ -130,5 +132,7 @@ int GreedyPlanner::do_initialize()
 	actions[num_actions-1][1] = 0.0;
 	actions[num_actions-1][2] = 10.0;
 
+	fprintf(_plannerlog, "GreedyPlanner initialized.\n");
+	fflush(_plannerlog);
 	return 0;
 }

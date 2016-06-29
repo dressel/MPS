@@ -9,6 +9,7 @@ class AlphaVector
 		int a;
 		vector<float> vec;
 		AlphaVector(int a, vector<float> vec);
+		AlphaVector(int a);
 };
 
 class MOMDPPlanner : public MyPlanner
@@ -27,6 +28,7 @@ class MOMDPPlanner : public MyPlanner
 	private:
 		int _x;		//vehicle positions (in grid cells, not actual)
 		int _y;
+		int check_momdp_streams(ifstream &a_file, ifstream &o_file, ifstream &v_file);
 };
 
 #endif

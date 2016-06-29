@@ -20,21 +20,27 @@ class MyPlanner : public Planner
 		Filter *filter;
 		string _param_file;
 		string _log_path;
-		FILE *_plannerlog;
 		double _search_size;
 		virtual int initialize() {};
 		Action action();
 		virtual Action get_action() {};
 		void update_belief();
-		int start_log();
-		void print_action(vector<float> &a);
-		void print_obs(double o);
-		void print_action(Action a);
 
 		/**
 		 * If there is an error, it will return the string "error"
 		 */
+
+	protected:
+		FILE *_plannerlog;
+		int start_log();
 		string read_config(string paramfile);
+		string read_config2(string paramfile);
+		string read_config_safe(string paramfile);
+		void log_config();
+
+		void print_action(vector<float> &a);
+		void print_obs(double o);
+		void print_action(Action a);
 
 
 	private:

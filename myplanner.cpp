@@ -4,7 +4,6 @@
 using std::cout;
 using std::endl;
 
-
 MyPlanner::MyPlanner()
 {
 }
@@ -26,10 +25,12 @@ Action MyPlanner::action()
 void MyPlanner::print_obs(double o)
 {
 	fprintf(_plannerlog, "obs = %.2f\n", o);
+	fflush(_plannerlog);
 }
 void MyPlanner::print_action(Action a)
 {
 	fprintf(_plannerlog, "COMMAND: (north,east,yaw) = %.2f,%.2f,%.2f\n", a.north, a.east, a.yaw);
+	fflush(_plannerlog);
 }
 
 void MyPlanner::print_action(vector<float> &a)
@@ -51,6 +52,8 @@ int MyPlanner::start_log()
 		// error opening file
 		return -1;
 	}
+	fprintf(_plannerlog, "Planner is alive (MyPlanner::start_log)\n");
+	fflush(_plannerlog);
 	return 0;
 }
 
@@ -76,8 +79,34 @@ double MyPlanner::get_obs()
 	else
 	{
 		fprintf(_plannerlog, "ERROR: SENSOR TYPE UNRECOGNIZED\n");
+		fflush(_plannerlog);
 	}
 	return o;
+}
+
+
+// I know the following works, but we want to move away from this
+
+
+string MyPlanner::read_config_safe(string paramfile)
+{
+	/* get the path */
+	int num_chars = paramfile.find_last_of("/") + 1;
+	string path = paramfile.substr(0, num_chars);
+
+	//_search_size = 100.0;
+	//_uav.set_limit(_search_size);
+	//_uav.set_xy();
+	//_uav.set_max_step(10.0);	
+	
+	// TODO: do this correctly
+	// the below seems to hang when I leave it be
+	//filter = new DF(_search_size, 11);
+
+	// the below seems to work.
+	//_uav.sensor = new BearingOnly();
+
+	return path;
 }
 
 /**
@@ -92,6 +121,7 @@ string MyPlanner::read_config(string paramfile)
 	if (!param_stream.is_open())
 	{
 		fprintf(_plannerlog, "FAILURE TO OPEN PLANNER CONFIG FILE.\n");
+		fflush(_plannerlog);
 		return "error";
 	}
 
@@ -100,6 +130,7 @@ string MyPlanner::read_config(string paramfile)
 	string path = paramfile.substr(0, num_chars);
 
 	/* read each line */
+	
 	bool err_flag;
 	while( !getline(param_stream, line).eof() )
 	{
@@ -110,11 +141,26 @@ string MyPlanner::read_config(string paramfile)
 			return "error";
 		}
 	}
+	
+	read_config_safe(paramfile);
 
 
 	/* close the stream and return the path of configuration files */
 	param_stream.close();
+	log_config();
 	return path;
+}
+
+void MyPlanner::log_config()
+{
+	// determine search size
+	fprintf(_plannerlog, "search size = %.1f\n", _search_size);
+	
+	// determine filter type
+	fprintf(_plannerlog, "filter = \n");
+
+	fflush(_plannerlog);
+	return;
 }
 
 
@@ -128,12 +174,16 @@ int MyPlanner::read_param_line(string line, string path)
 
 	if (line.find("search_size") != string::npos)
 		return read_search_size_line(line);
+	
 	if (line.find("sensor") != string::npos)
 		return read_sensor_line(line, path);
+	
 	if (line.find("filter") != string::npos)
 		return read_filter_line(line);
+	
 
 	// it's ok if we don't recognize the line
+	// TODO: really, we should be upset we didn't recognize the line
 	return 0;
 }
 
@@ -156,9 +206,11 @@ int MyPlanner::read_sensor_line(string line, string path)
 	if (sub == "bo")
 	{
 		_uav.sensor = new BearingOnly();
+		fprintf(_plannerlog, "New BearingOnly sensor created.\n");
+		fflush(_plannerlog);
 		return 0;
 	}
-	if (sub == "do")
+	else if (sub == "do")
 	{
 		DirOmni *domni = new DirOmni();
 		e_flag += domni->set_means(path + "norm_means.csv");
@@ -171,6 +223,7 @@ int MyPlanner::read_sensor_line(string line, string path)
 	}
 
 	fprintf(_plannerlog, "Failed to recognize requested sensor.\n");
+	fflush(_plannerlog);
 	return -1;
 }
 
@@ -185,12 +238,26 @@ int MyPlanner::read_filter_line(string line)
 	if (sub == "df")
 	{
 		getline(ss, sub, ',');
-		int filter_info = stoi(sub);
-		filter = new DF(_search_size, filter_info);
+		/*
+		int filter_info = 13;
+		fprintf(_plannerlog, "sub = %s\n", sub.c_str());
+		fflush(_plannerlog);
+		*/
+		int filter_info = 13;
+		int filter_info2 = stoi(sub);
+		int filter_info3 = atoi(sub.c_str());
+		fprintf(_plannerlog, "sub = %d\n", filter_info);
+		fprintf(_plannerlog, "sub = %d\n", filter_info2);
+		fprintf(_plannerlog, "sub = %d\n", filter_info3);
+		fflush(_plannerlog);
+		filter = new DF(_search_size, filter_info3);
+		fprintf(_plannerlog, "New discrete filter created.\n");
+		fflush(_plannerlog);
 		return 0;
 	}
 
 	fprintf(_plannerlog, "Failed to recognize requested filter.\n");
+	fflush(_plannerlog);
 	return -1;
 }
 

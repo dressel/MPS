@@ -21,12 +21,15 @@ int GreedyPlanner2::initialize()
 	{
 		//planner_log << "Greedy2 expects a discrete filter." << endl;
 		fprintf(_plannerlog, "Greedy2 expects a discrete filter.\n");
+		fflush(_plannerlog);
 		return -1;
 	}
 	DF * f = static_cast<DF *>(this->filter);
 	_n = f->n;
 	_cell_size = f->cell_size;
 
+	fprintf(_plannerlog, "GreedyPlanner2 initialized.\n");
+	fflush(_plannerlog);
 	return 0;
 }
 
@@ -71,6 +74,10 @@ Action GreedyPlanner2::get_action()
 
 	Action action{};
 	Action::set_relative_motion(&action, command[0], command[1]);
+	//Action::set_relative_motion(&action, 10., 10.);
+
+	//Action action{};
+	//Action::set_relative_motion(&action, actions[best_i][0], actions[best_i][1]);
 
 	return action;
 }

@@ -16,19 +16,27 @@ int CirclePlanner::initialize()
 	if (path == "error")
 		return -1;
 
+	
 	// handle last action
 	this->last.resize(2);
 	this->last[0] = 0.0;
 	this->last[1] = 0.0;
+	
+	fprintf(_plannerlog, "CirclePlanner initialized.\n");
 	return 0;
 }
 
 
 Action CirclePlanner::get_action()
 {
+	fprintf(_plannerlog, "Circle action start.\n");
+	fflush(_plannerlog);
 	// ok, we've updated belief. Now pick action
 	float ax = -cos(_bearing_max * M_PI/180.0);
 	float ay = sin(_bearing_max * M_PI/180.0);
+
+	fprintf(_plannerlog, "Circle action mid.\n");
+	fflush(_plannerlog);
 	
 	// prevent circle from switching directions
 	// if dot product is negative from last attempt, direction is different
@@ -37,6 +45,9 @@ Action CirclePlanner::get_action()
 		ax = -ax;
 		ay = -ay;
 	}
+
+	fprintf(_plannerlog, "Circle action mid2.\n");
+	fflush(_plannerlog);
 
 	/*
 	vector<float>commands (3);
@@ -48,9 +59,15 @@ Action CirclePlanner::get_action()
 	Action action{};
 	Action::set_relative_motion(&action, _uav.max_step * ay, _uav.max_step * ax);
 
+	fprintf(_plannerlog, "Circle action mid3.\n");
+	fflush(_plannerlog);
+
 	// preserve current action as last to check for direction
 	last[0] = ax;
 	last[1] = ay;
+
+	fprintf(_plannerlog, "Circle action last.\n");
+	fflush(_plannerlog);
 
 	return action;
 }
