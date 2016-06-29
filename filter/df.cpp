@@ -20,6 +20,10 @@ DF::DF(double l, int n)
 	}
 }
 
+DF::~DF()
+{
+}
+
 void DF::reset()
 {
 	int i, j;

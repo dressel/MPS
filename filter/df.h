@@ -20,6 +20,7 @@ class DF : public Filter
 
 		// for right now, assume 36 bins
 		DF(double l, int n);
+		~DF();
 		int update(Vehicle x, double o);
 		double mutual_information(Vehicle x, vector<double> xp);
 		void print_belief();

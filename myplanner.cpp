@@ -7,6 +7,13 @@ using std::endl;
 MyPlanner::MyPlanner()
 {
 }
+
+MyPlanner::~MyPlanner()
+{
+	delete filter;
+}
+
+
 MyPlanner::MyPlanner(string paramfile, string logpath)
 {
 	_param_file = paramfile;
@@ -101,10 +108,10 @@ string MyPlanner::read_config_safe(string paramfile)
 	
 	// TODO: do this correctly
 	// the below seems to hang when I leave it be
-	//filter = new DF(_search_size, 11);
+	filter = new DF(_search_size, 11);
 
 	// the below seems to work.
-	//_uav.sensor = new BearingOnly();
+	_uav.sensor = new BearingOnly();
 
 	return path;
 }
@@ -132,6 +139,7 @@ string MyPlanner::read_config(string paramfile)
 	/* read each line */
 	
 	bool err_flag;
+	
 	while( !getline(param_stream, line).eof() )
 	{
 		err_flag = read_param_line(line, path);
@@ -142,7 +150,8 @@ string MyPlanner::read_config(string paramfile)
 		}
 	}
 	
-	read_config_safe(paramfile);
+	
+	//read_config_safe(paramfile);
 
 
 	/* close the stream and return the path of configuration files */
@@ -193,6 +202,7 @@ int MyPlanner::read_search_size_line(string line)
 	_search_size = stod(line.substr(ind, line.length()-ind));
 	_uav.set_limit(_search_size);
 	_uav.set_xy();
+	_uav.heading = 0.0;
 	_uav.set_max_step(10.0);	// TODO: do this correctly
 	return 0;
 }

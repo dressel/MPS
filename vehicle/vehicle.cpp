@@ -2,6 +2,16 @@
 
 Vehicle::Vehicle()
 {
+	printf("HELLO THERE\n");
+	//sensor = NULL;
+}
+
+Vehicle::~Vehicle()
+{
+	/*
+	if (sensor != NULL)
+		delete sensor;
+	*/
 }
 
 Vehicle::Vehicle(double ss, double ms)
