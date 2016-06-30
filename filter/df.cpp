@@ -276,7 +276,7 @@ double DF::true_bearing(double px, double py, double tx, double ty)
 	return ang_deg;
 }
 
-double DF::p_obs(Vehicle x, double xp, double yp, double hp, int ob)
+double DF::p_obs(Vehicle &x, double xp, double yp, double hp, int ob)
 {
 	double prob = 0.0;
 	int theta_x, theta_y;
@@ -297,7 +297,7 @@ double DF::p_obs(Vehicle x, double xp, double yp, double hp, int ob)
 /**
  * Pose needs to be (x,y,heading)
  */
-double DF::mutual_information(Vehicle uav, vector<double> np)
+double DF::mutual_information(Vehicle &uav, vector<double> np)
 {
 	double prob = p_obs(uav, np[0], np[1], np[2], 0);
 	double half_cell = cell_size / 2.0;

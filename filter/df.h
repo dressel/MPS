@@ -22,7 +22,7 @@ class DF : public Filter
 		DF(double l, int n);
 		~DF();
 		int update(Vehicle &x, double o);
-		double mutual_information(Vehicle x, vector<double> xp);
+		double mutual_information(Vehicle &x, vector<double> xp);
 		void print_belief();
 		void print_belief(FILE *outfile);
 		void print_belief(ofstream &os);
@@ -48,7 +48,7 @@ class DF : public Filter
 
 		/* helpers for mutual information */
 		double p_obs();
-		double p_obs(Vehicle x, double xp, double yp, double hp, int ob);
+		double p_obs(Vehicle &x, double xp, double yp, double hp, int ob);
 
 };
 #endif	// FILTER_DF_H_

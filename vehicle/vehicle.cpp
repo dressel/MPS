@@ -35,7 +35,7 @@ vector<double> Vehicle::new_pose(vector<float> &a)
 	vector<double> temp (3);
 	temp[0] = x + a[1];
 	temp[1] = y + a[0];
-	double new_h = heading + a[3];
+	double new_h = heading + a[2];
 	if (new_h > 360.0)
 		new_h -= 360.0;
 	if (new_h < 0.0)
