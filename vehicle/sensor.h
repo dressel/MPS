@@ -7,5 +7,6 @@ class Sensor
 {
 	public:
 		virtual int type() = 0;
+		virtual ~Sensor(){};
 };
 #endif	// SENSOR_H_

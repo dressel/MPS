@@ -15,7 +15,8 @@ class Filter
 {
 	public:
 		int type;
-		virtual int update(Vehicle x, double o) = 0;
+		virtual ~Filter() {};
+		virtual int update(Vehicle &x, double o) = 0;
 		virtual void print_belief() = 0;
 		virtual void print_belief(FILE *outfile) = 0;
 		virtual void print_belief(ofstream &os) = 0;

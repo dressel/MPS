@@ -8,10 +8,9 @@ Vehicle::Vehicle()
 
 Vehicle::~Vehicle()
 {
-	/*
-	if (sensor != NULL)
-		delete sensor;
-	*/
+	//if (sensor != NULL)
+	//	delete sensor;
+	delete sensor;
 }
 
 Vehicle::Vehicle(double ss, double ms)

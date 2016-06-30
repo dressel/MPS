@@ -6,6 +6,7 @@ using std::endl;
 
 MyPlanner::MyPlanner()
 {
+	//filter = NULL;
 }
 
 MyPlanner::~MyPlanner()
@@ -109,6 +110,7 @@ string MyPlanner::read_config_safe(string paramfile)
 	
 	// TODO: do this correctly
 	// the below seems to hang when I leave it be
+	//delete filter;
 	filter = new DF(_search_size, 41);
 
 	// the below seems to work.

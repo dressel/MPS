@@ -11,12 +11,16 @@ DF::DF(double l, int n)
 	this->bin_offset = 0;
 
 	// Create the belief, then 
-	this->b = vector<vector<double> >(n);
-	int i;
+	this->b.resize(n);
+	int i, j;
 	double prob = 1.0 / (n * n);
 	for (i = 0; i < n; i++)
 	{
-		b[i] = vector<double>(n, prob);
+		b[i].resize(n);
+		for (j = 0; j < n; j++)
+		{
+			b[i][j] = prob;
+		}
 	}
 }
 
@@ -38,7 +42,7 @@ void DF::reset()
 }
 
 
-int DF::update(Vehicle x, double o)
+int DF::update(Vehicle &x, double o)
 {
 	int ob = this->obs2bin(o, x.sensor);
 	int num_cells = this->n;

@@ -16,7 +16,8 @@ class Vehicle
 		double heading;
 		double limit;		// size of region
 		double max_step;
-		Sensor *sensor = NULL;
+		//Sensor *sensor = NULL;
+		Sensor *sensor;
 
 		Vehicle();
 		~Vehicle();
