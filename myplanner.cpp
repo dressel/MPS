@@ -140,10 +140,7 @@ string MyPlanner::read_config(string paramfile)
 	string path = paramfile.substr(0, num_chars);
 
 	/* read each line */
-	
 	bool err_flag;
-	
-	/*
 	while( !getline(param_stream, line).eof() )
 	{
 		err_flag = read_param_line(line, path);
@@ -153,10 +150,7 @@ string MyPlanner::read_config(string paramfile)
 			return "error";
 		}
 	}
-	*/
-	
-	
-	read_config_safe(paramfile);
+	//read_config_safe(paramfile);
 
 
 	/* close the stream and return the path of configuration files */
