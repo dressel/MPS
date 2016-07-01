@@ -24,7 +24,7 @@ double Normal::cdf(double x)
 }
 
 
-double DF::true_bearing(double px, double py, double tx, double ty)
+double true_bearing(double px, double py, double tx, double ty)
 {
 	double xr = tx - px;
 	double yr = ty - py;
