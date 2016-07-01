@@ -33,3 +33,24 @@ double true_bearing(double px, double py, double tx, double ty)
 		ang_deg += 360.0;
 	return ang_deg;
 }
+
+/**
+ * xr = x_jammer - x_vehicle
+ * yr = y_jammer - y_vehicle
+ */
+double true_bearing(double xr, double yr)
+{
+	double ang_deg = atan2(xr,yr) * 180.0 / M_PI;
+	if (ang_deg < 0.0)
+		ang_deg += 360.0;
+	return ang_deg;
+}
+
+double fit_180(double angle)
+{
+	if (angle > 180.0)
+		angle -= 360.0;
+	else if (angle < -180.0)
+		angle += 360.0;
+	return angle;
+}

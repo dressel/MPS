@@ -17,11 +17,10 @@ class GreedyPlanner : public MyPlanner
 		 */
 		int initialize();
 
-		// TODO: function that prints out actions so we can see if correct
-
-	//private:
-		vector<vector<float> > actions;
 		Action get_action();
+
+	private:
+		vector<vector<float> > actions;
 		int bo_initialize();
 		int do_initialize();
 };
