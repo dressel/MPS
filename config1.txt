@@ -1,5 +1,5 @@
 # First configuration
 # Assumes a bearing only sensor
 search_size,100
-filter,df,21
 sensor,bo,13,0
+filter,df,31,1
