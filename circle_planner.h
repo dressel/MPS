@@ -9,6 +9,8 @@ class CirclePlanner : public MyPlanner
 		CirclePlanner(string paramfile, string logpath);
 		int initialize();
 		Action get_action();
+
+	private:
 		vector<float> last;
 };
 #endif
