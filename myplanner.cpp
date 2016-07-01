@@ -152,7 +152,6 @@ string MyPlanner::read_config(string paramfile)
 	}
 	//read_config_safe(paramfile);
 
-
 	/* close the stream and return the path of configuration files */
 	param_stream.close();
 	log_config();
@@ -161,11 +160,18 @@ string MyPlanner::read_config(string paramfile)
 
 void MyPlanner::log_config()
 {
+	fprintf(_plannerlog, "CONFIG SUMMARY:\n");
+
 	// determine search size
-	fprintf(_plannerlog, "search size = %.1f\n", _search_size);
+	fprintf(_plannerlog, "\tsearch size = %.1f\n", _search_size);
 	
 	// determine filter type
-	fprintf(_plannerlog, "filter = \n");
+	fprintf(_plannerlog, "\tfilter type = %d\n", filter->type);
+	if (filter->type == 0)
+	{
+		DF* df = static_cast<DF*>(filter);
+		fprintf(_plannerlog, "\t\tn = %d\n", df->n);
+	}
 
 	fflush(_plannerlog);
 	return;
@@ -247,19 +253,10 @@ int MyPlanner::read_filter_line(string line)
 	if (sub == "df")
 	{
 		getline(ss, sub, ',');
-		/*
-		int filter_info = 13;
-		fprintf(_plannerlog, "sub = %s\n", sub.c_str());
-		fflush(_plannerlog);
-		*/
-		int filter_info = 13;
-		int filter_info2 = stoi(sub);
-		int filter_info3 = atoi(sub.c_str());
-		fprintf(_plannerlog, "sub = %d\n", filter_info);
-		fprintf(_plannerlog, "sub = %d\n", filter_info2);
-		fprintf(_plannerlog, "sub = %d\n", filter_info3);
-		fflush(_plannerlog);
-		filter = new DF(_search_size, filter_info3);
+		int filter_info = stoi(sub);
+		//fprintf(_plannerlog, "sub = %d\n", filter_info);
+		//fflush(_plannerlog);
+		filter = new DF(_search_size, filter_info);
 		fprintf(_plannerlog, "New discrete filter created.\n");
 		fflush(_plannerlog);
 		return 0;
