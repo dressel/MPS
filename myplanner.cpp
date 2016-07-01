@@ -227,6 +227,7 @@ int MyPlanner::read_sensor_line(string line, string path)
 	}
 	else if (sub == "do")
 	{
+		// TODO: Ahhhh this is ugly. This shouldn't be here.
 		DirOmni *domni = new DirOmni();
 		e_flag += domni->set_means(path + "norm_means.csv");
 		e_flag += domni->set_stds(path + "norm_means.csv");
@@ -252,11 +253,21 @@ int MyPlanner::read_filter_line(string line)
 
 	if (sub == "df")
 	{
+		// get size
 		getline(ss, sub, ',');
-		int filter_info = stoi(sub);
-		//fprintf(_plannerlog, "sub = %d\n", filter_info);
-		//fflush(_plannerlog);
-		filter = new DF(_search_size, filter_info);
+		DF* df = new DF(_search_size, stoi(sub));
+
+		// is it a fast filter or a slow one?
+		getline(ss, sub, ',');
+		// TODO: allow user to enter nothing here
+		if (stoi(sub) == 1)
+		{
+			//fast
+			printf("HERE WE GO\n");
+			df->set_obs_probs(_uav.sensor);
+		}
+		filter = df;
+
 		fprintf(_plannerlog, "New discrete filter created.\n");
 		fflush(_plannerlog);
 		return 0;

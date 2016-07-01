@@ -76,18 +76,9 @@ Action GreedyPlanner2::get_action_slow()
 
 	double dx = best_x - _uav.x;
 	double dy = best_y - _uav.y;
-	vector<float> command;
-	command.resize(3);
-	command[0] = dy;
-	command[1] = dx;
-	command[2] = 0;
 
 	Action action{};
-	Action::set_relative_motion(&action, command[0], command[1]);
-	//Action::set_relative_motion(&action, 10., 10.);
-
-	//Action action{};
-	//Action::set_relative_motion(&action, actions[best_i][0], actions[best_i][1]);
+	Action::set_relative_motion(&action, dy, dx);
 
 	return action;
 }
@@ -96,13 +87,14 @@ Action GreedyPlanner2::get_action_fast()
 {
 	int xv, yv;
 	double mi, best_mi, best_x, best_y;
-	best_mi = -99999.0;
+	best_mi = -999999.0;
 
 
 	for (xv = 0; xv < _n; xv++)
 	{
 		for (yv = 0; yv < _n; yv++)
 		{
+			//printf("xv, yv = %d,%d\n", xv, yv);
 			mi = filter->mutual_information(_uav, xv, yv);
 			if (mi > best_mi)
 			{
@@ -115,14 +107,9 @@ Action GreedyPlanner2::get_action_fast()
 
 	double dx = best_x - _uav.x;
 	double dy = best_y - _uav.y;
-	vector<float> command;
-	command.resize(3);
-	command[0] = dy;
-	command[1] = dx;
-	command[2] = 0;
 
 	Action action{};
-	Action::set_relative_motion(&action, command[0], command[1]);
+	Action::set_relative_motion(&action, dy, dx);
 
 	return action;
 }
