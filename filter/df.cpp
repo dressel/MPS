@@ -265,17 +265,6 @@ int DF::obs2bin(double o, DirOmni *s)
 	return (int)o;
 }
 
-
-double DF::true_bearing(double px, double py, double tx, double ty)
-{
-	double xr = tx - px;
-	double yr = ty - py;
-	double ang_deg = atan2(xr,yr) * 180.0 / M_PI;
-	if (ang_deg < 0.0)
-		ang_deg += 360.0;
-	return ang_deg;
-}
-
 double DF::p_obs(Vehicle &x, double xp, double yp, double hp, int ob)
 {
 	double prob = 0.0;
