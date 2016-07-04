@@ -32,12 +32,12 @@ Action MyPlanner::action()
 
 void MyPlanner::print_obs(double o)
 {
-	fprintf(_plannerlog, "obs = %.2f\n", o);
+	fprintf(_plannerlog, "observation = %.2f\n", o);
 	fflush(_plannerlog);
 }
 void MyPlanner::print_action(Action a)
 {
-	fprintf(_plannerlog, "COMMAND: (north,east,yaw) = %.2f,%.2f,%.2f\n", a.north, a.east, a.yaw);
+	fprintf(_plannerlog, "action (north,east,yaw) = %.2f,%.2f,%.2f\n", a.north, a.east, a.yaw);
 	fflush(_plannerlog);
 }
 
@@ -263,7 +263,7 @@ int MyPlanner::read_filter_line(string line)
 		if (stoi(sub) == 1)
 		{
 			//fast
-			printf("HERE WE GO\n");
+			printf("setting obs probs for fast discrete filter\n");
 			df->set_obs_probs(_uav.sensor);
 		}
 		filter = df;
@@ -283,5 +283,6 @@ void MyPlanner::update_belief()
 	double o = get_obs();
 	print_obs(o);
 	filter->update(_uav, o);
+	fprintf(_plannerlog, "belief\n");
 	filter->print_belief(_plannerlog);
 }

@@ -15,21 +15,17 @@ class MyPlanner : public Planner
 {
 	public:
 		MyPlanner();
-		~MyPlanner();
 		MyPlanner(string paramfile, string logpath);
+		~MyPlanner();
 		Vehicle _uav;
 		Filter *filter;
 		string _param_file;
 		string _log_path;
 		double _search_size;
+
 		virtual int initialize() {};
 		Action action();
-		virtual Action get_action() {};
-		void update_belief();
 
-		/**
-		 * If there is an error, it will return the string "error"
-		 */
 
 	protected:
 		FILE *_plannerlog;
@@ -39,9 +35,16 @@ class MyPlanner : public Planner
 		string read_config_safe(string paramfile);
 		void log_config();
 
+		/**
+		 * action = d_north,d_east,d_yaw (in meters)
+		 * observation = o
+		 */
 		void print_action(vector<float> &a);
 		void print_obs(double o);
 		void print_action(Action a);
+
+		void update_belief();
+		virtual Action get_action() {};
 
 
 	private:

@@ -121,7 +121,6 @@ void DF::print_belief()
 		}
 		printf("%.2f\n", b[n-1][y]);
 	}
-	printf("\n");
 }
 
 void DF::print_belief(FILE *outfile)
@@ -135,7 +134,6 @@ void DF::print_belief(FILE *outfile)
 		}
 		fprintf(outfile, "%.2f\n", b[n-1][y]);
 	}
-	fprintf(outfile, "\n");
 }
 
 void DF::print_belief(ofstream &os)
