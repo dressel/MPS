@@ -46,7 +46,6 @@ int DF::update(Vehicle &x, double o)
 {
 	int ob = this->obs2bin(o, x.sensor);
 	int num_cells = this->n;
-	double cell_size = this->cell_size;
 	double bp_sum = 0.0;
 	int theta_x, theta_y;
 	double tx, ty, temp;
@@ -421,4 +420,102 @@ double DF::mutual_information(Vehicle &uav, int xv, int yv)
 		}
 	}
 	return H_o - H_o_t;
+}
+
+pair<double,double> DF::centroid()
+{
+	double x_val = 0.0;
+	double y_val = 0.0;
+	int xi, yi;
+
+	for (xi = 0; xi < n; xi++)
+	{
+		for (yi = 0; yi < n; yi++)
+		{
+			x_val += (xi+0.5) * b[xi][yi];
+			y_val += (yi+0.5) * b[xi][yi];
+		}
+	}
+	pair <double,double> ret (x_val*cell_size, y_val*cell_size);
+	return ret;
+}
+
+vector<double> DF::covariance()
+{
+	double mu_x, mu_y;
+	pair<double,double> temp = centroid();
+	mu_x = temp.first;
+	mu_y = temp.second;
+	int xi, yi;
+
+	double c_xx = 0.0;
+	double c_xy = 0.0;
+	double c_yy = 0.0;
+	double x = 0.0;
+	double y = 0.0;
+
+	vector<double> cov_abcd(4);
+	for (xi = 0; xi < n; xi++)
+	{
+		for (yi = 0; yi < n; yi++)
+		{
+			x = (xi+0.5) * cell_size;
+			y = (yi+0.5) * cell_size;
+
+			c_xx += b[xi][yi] * x * x;
+			c_yy += b[xi][yi] * y * y;
+			c_xy += b[xi][yi] * (x - mu_x) * (y - mu_y);
+		}
+	}
+	c_xx -= (mu_x * mu_x);
+	c_yy -= (mu_y * mu_y);
+
+	cov_abcd[0] = c_xx;
+	cov_abcd[1] = c_xy;
+	cov_abcd[2] = c_xy;
+	cov_abcd[3] = c_yy;
+
+	return cov_abcd;
+}
+
+vector<double> DF::meancov()
+{
+	double mu_x = 0.0;
+	double mu_y = 0.0;
+	int xi, yi;
+
+	double c_xx = 0.0;
+	double c_xy = 0.0;
+	double c_yy = 0.0;
+	double x = 0.0;
+	double y = 0.0;
+
+	vector<double> cov_abcd(6);
+	for (xi = 0; xi < n; xi++)
+	{
+		for (yi = 0; yi < n; yi++)
+		{
+			x = (xi+0.5) * cell_size;
+			y = (yi+0.5) * cell_size;
+
+			mu_x += x * b[xi][yi];
+			mu_y += y * b[xi][yi];
+
+			c_xx += b[xi][yi] * x * x;
+			c_yy += b[xi][yi] * y * y;
+			c_xy += b[xi][yi] * x * y;
+		}
+	}
+	c_xx -= (mu_x * mu_x);
+	c_yy -= (mu_y * mu_y);
+	c_xy -= (mu_x * mu_y);
+
+	cov_abcd[0] = mu_x;
+	cov_abcd[1] = mu_y;
+	cov_abcd[2] = c_xx;
+	cov_abcd[3] = c_xy;
+	cov_abcd[4] = c_xy;
+	cov_abcd[5] = c_yy;
+
+	return cov_abcd;
 }

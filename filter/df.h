@@ -27,6 +27,10 @@ class DF : public Filter
 		void initial_belief();
 		void reset();
 
+		pair<double,double> centroid();
+		vector<double> covariance();
+		vector<double> meancov();
+
 		void print_belief();
 		void print_belief(FILE *outfile);
 		void print_belief(ofstream &os);
