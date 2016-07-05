@@ -196,6 +196,11 @@ double DF::O(double px, double py, double ph, double tx, double ty, int obs_bin,
 	return d.cdf(obs_bin+1) - d.cdf(obs_bin);
 }
 
+double DF::O(int xr, int yr, int obs_bin)
+{
+	return obs_probs[xr+n-1][yr+n-1][obs_bin];
+}
+
 double DF::O(int xr, int yr, int obs_bin, Sensor *s)
 {
 	double prob = 0.0;
@@ -346,7 +351,8 @@ double DF::p_obs2(Vehicle &x, int xv, int yv, int ob)
 		for (theta_y = 0; theta_y < n; theta_y++)
 		{
 			yr = theta_y - yv;
-			prob += b[theta_x][theta_y] * O(xr, yr, ob, x.sensor);
+			//prob += b[theta_x][theta_y] * O(xr, yr, ob, x.sensor);
+			prob += b[theta_x][theta_y] * O(xr, yr, ob);
 		}
 	}
 	return prob;
@@ -407,7 +413,8 @@ double DF::mutual_information(Vehicle &uav, int xv, int yv)
 		{
 			for (theta_y = 0; theta_y < n; theta_y++)
 			{
-				pot = O(theta_x-xv, theta_y-yv, obo, uav.sensor);
+				//pot = O(theta_x-xv, theta_y-yv, obo, uav.sensor);
+				pot = O(theta_x-xv, theta_y-yv, obo);
 				if (pot > 0.0)
 					H_o_t -= pot * b[theta_x][theta_y] * log(pot);
 			}

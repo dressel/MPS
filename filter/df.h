@@ -48,6 +48,7 @@ class DF : public Filter
 		double O(double px, double py, double tx, double ty, int obs_bin, BearingOnly *bo);
 		double O(double px, double py, double ph, double tx, double ty, int obs_bin, DirOmni *s);
 		
+		double O(int xr, int yr, int obs_bin);
 		double O(int xr, int yr, int obs_bin, Sensor *s);
 		double O(int xr, int yr, int obs_bin, BearingOnly *bo);
 		double O_start(int xr, int yr, int obs_bin, BearingOnly *bo);
