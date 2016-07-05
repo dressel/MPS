@@ -34,6 +34,7 @@ class MyPlanner : public Planner
 		string read_config2(string paramfile);
 		string read_config_safe(string paramfile);
 		void log_config();
+		int _policy_extra_1;
 
 		/**
 		 * action = d_north,d_east,d_yaw (in meters)
@@ -53,6 +54,7 @@ class MyPlanner : public Planner
 		int read_search_size_line(string line);
 		int read_sensor_line(string line, string path);
 		int read_filter_line(string line);
+		int read_policy_line(string line);
 
 };
 #endif

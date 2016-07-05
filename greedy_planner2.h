@@ -21,5 +21,7 @@ class GreedyPlanner2 : public MyPlanner
 	private:
 		Action get_action_slow();
 		Action get_action_fast();
+		Action get_action_faster_det();
+		Action get_action_faster_eig();
 };
 #endif

@@ -54,3 +54,21 @@ double fit_180(double angle)
 		angle += 360.0;
 	return angle;
 }
+
+double determinant(double a, double b, double c, double d)
+{
+	return a*d - b*c;
+}
+
+double smallest_eig(double a, double b, double c, double d)
+{
+	double B = -1.0 * (d+a);
+	double C = a*d - b*c;
+	double a1 = (-B + sqrt(B*B - 4*C)) / 2.0;
+	double a2 = (-B - sqrt(B*B - 4*C)) / 2.0;
+
+	if (a1 < a2)
+		return a1;
+
+	return a2;
+}

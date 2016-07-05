@@ -125,6 +125,7 @@ string MyPlanner::read_config_safe(string paramfile)
  */
 string MyPlanner::read_config(string paramfile)
 {
+	_policy_extra_1 = 0;
 	ifstream param_stream;
 	string line;
 	param_stream.open(paramfile);
@@ -194,10 +195,20 @@ int MyPlanner::read_param_line(string line, string path)
 	
 	if (line.find("filter") != string::npos)
 		return read_filter_line(line);
+
+	if (line.find("policy") != string::npos)
+		return read_policy_line(line);
 	
 
 	// it's ok if we don't recognize the line
 	// TODO: really, we should be upset we didn't recognize the line
+	return 0;
+}
+
+int MyPlanner::read_policy_line(string line)
+{
+	int ind = line.find_last_of(",")+1;
+	_policy_extra_1 = stoi(line.substr(ind, line.length()-ind));
 	return 0;
 }
 
