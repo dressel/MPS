@@ -23,6 +23,19 @@ double Normal::cdf(double x)
 	return 0.5 * (1 + erf(temp));
 }
 
+double cdf(double mu, double sigma, double x)
+{
+	double temp = (x - mu) / (sigma * sqrt(2.0));
+	double tempans = 0.5 * (1 + erf(temp));
+	if isnan((tempans))
+	{
+		cout << "Normal: temp = " << temp << ", tempans = " << tempans << endl;
+		cout << "x = " << x << ", mu = " << mu << ", sigma = " << sigma << endl;
+	}
+		
+	return 0.5 * (1 + erf(temp));
+}
+
 
 double true_bearing(double px, double py, double tx, double ty)
 {

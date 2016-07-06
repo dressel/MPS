@@ -173,8 +173,10 @@ double DF::O(double px, double py, double tx, double ty, int obs_bin, BearingOnl
 	double ang_deg = true_bearing(px, py, tx, ty);
 
 	pair<double, double> rbe = rel_bin_edges(ang_deg, obs_bin);
-	Normal d(0.0, bo->noise_sigma);
-	double prob = d.cdf(rbe.second) - d.cdf(rbe.first);
+	//Normal d(0.0, bo->noise_sigma);
+	//double prob = d.cdf(rbe.second) - d.cdf(rbe.first);
+	double s = bo->noise_sigma;
+	double prob = cdf(0.0, s, rbe.second) - cdf(0.0, s, rbe.first);
 
 	return prob;
 }

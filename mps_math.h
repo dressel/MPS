@@ -20,3 +20,5 @@ double fit_180(double angle);
  */
 double determinant(double a, double b, double c, double d);
 double smallest_eig(double a, double b, double c, double d);
+
+double cdf(double mu, double sigma, double x);
