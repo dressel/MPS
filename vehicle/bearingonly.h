@@ -6,9 +6,11 @@
 class BearingOnly : public Sensor
 {
 	public:
-		int noise;
 		BearingOnly();
+		BearingOnly(double noise_sigma);
 		~BearingOnly();
+
 		int type();
+		int noise_sigma;	// std deviation, in degrees
 };
 #endif

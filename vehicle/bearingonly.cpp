@@ -3,8 +3,14 @@
 
 BearingOnly::BearingOnly()
 {
-	this->noise = 10;
+	this->noise_sigma = 10;
 }
+
+BearingOnly::BearingOnly(double ns)
+{
+	this->noise_sigma = ns;
+}
+
 BearingOnly::~BearingOnly()
 {
 }

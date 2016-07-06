@@ -173,7 +173,7 @@ double DF::O(double px, double py, double tx, double ty, int obs_bin, BearingOnl
 	double ang_deg = true_bearing(px, py, tx, ty);
 
 	pair<double, double> rbe = rel_bin_edges(ang_deg, obs_bin);
-	Normal d(0.0, bo->noise);
+	Normal d(0.0, bo->noise_sigma);
 	double prob = d.cdf(rbe.second) - d.cdf(rbe.first);
 
 	return prob;
@@ -225,7 +225,7 @@ double DF::O_start(int xr, int yr, int obs_bin, BearingOnly *bo)
 {
 	double ang_deg = true_bearing(xr*cell_size, yr*cell_size);
 	pair<double, double> rbe = rel_bin_edges(ang_deg, obs_bin);
-	Normal d(0.0, bo->noise);
+	Normal d(0.0, bo->noise_sigma);
 	double prob = d.cdf(rbe.second) - d.cdf(rbe.first);
 	return prob;
 }
