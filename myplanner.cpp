@@ -132,6 +132,13 @@ void MyPlanner::log_config()
 
 	// determine search size
 	fprintf(_plannerlog, "\tsearch size = %.1f\n", _search_size);
+
+	// vehicle stuff
+	fprintf(_plannerlog, "\tvehicle = %.1f\n", _search_size);
+	fprintf(_plannerlog, "\t\txmin = %.1f\n", _uav._xmin);
+	fprintf(_plannerlog, "\t\txmax = %.1f\n", _uav._xmax);
+	fprintf(_plannerlog, "\t\tymin = %.1f\n", _uav._ymin);
+	fprintf(_plannerlog, "\t\tymax = %.1f\n", _uav._ymax);
 	
 	// determine filter type
 	fprintf(_plannerlog, "\tfilter type = %d\n", filter->type);
@@ -192,20 +199,46 @@ int MyPlanner::read_search_size_line(string line)
 	_uav.set_max_step(10.0);	// TODO: do this correctly
 	return 0;
 }
+
+//TODO: do some error checking here
 int MyPlanner::read_vehicle_line(string line)
 {
 	string sub;
 	stringstream ss(line);
-	getline(ss, sub, ',');
-	getline(ss, sub, ',');		// done twice to get second element
+	getline(ss, sub, ','); // getting rid of first element
 
-	double x = stod(sub);
-	getline(ss, sub, ',');	
-	double y = stod(sub);
-	//printf("x = %.3f, y = %.3f\n", x, y);
-	_uav.set_xy(x,y);
-	//_uav.heading = 0.0;
-	//_uav.set_max_step(10.0);	// TODO: do this correctly
+	while (getline(ss,sub,','))
+	{
+		if (sub == "xy")
+		{
+			getline(ss, sub, ',');
+			double x = stod(sub);
+			getline(ss, sub, ',');	
+			double y = stod(sub);
+			_uav.set_xy(x,y);
+			printf("x = %.3f, y = %.3f\n", x,y);
+		}
+		if (sub == "limits")
+		{
+			getline(ss, sub, ',');
+			int xmin = stod(sub);
+			getline(ss, sub, ',');
+			int xmax = stod(sub);
+			getline(ss, sub, ',');
+			int ymin = stod(sub);
+			getline(ss, sub, ',');
+			int ymax = stod(sub);
+			_uav.set_limits(xmin,xmax,ymin,ymax);
+		}
+		if (sub == "cells")
+		{
+			getline(ss, sub, ',');
+			_uav._numcells_x = stoi(sub);
+			getline(ss, sub, ',');
+			_uav._numcells_y = stoi(sub);
+		}
+	}
+
 	return 0;
 }
 int MyPlanner::read_sensor_line(string line, string path)
@@ -217,7 +250,7 @@ int MyPlanner::read_sensor_line(string line, string path)
 	getline(ss, sub, ',');		// done twice to get second element
 	if (sub == "bo")
 	{
-		_uav.sensor = new BearingOnly();
+		_uav.sensor = new BearingOnly(13.0);
 		fprintf(_plannerlog, "New BearingOnly sensor created.\n");
 		fflush(_plannerlog);
 		return 0;

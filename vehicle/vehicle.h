@@ -16,13 +16,25 @@ class Vehicle
 		double heading;
 		double limit;		// size of region
 		double max_step;
-		//Sensor *sensor = NULL;
 		Sensor *sensor;
 
+		/* vehicle limits */
+		double _xmin;
+		double _xmax; 
+		double _ymin;
+		double _ymax;
+
+		/* sampling for discrete policy types */
+		int _numcells_x;
+		int _numcells_y;
+
+		/* constructors, destructors */
 		Vehicle();
-		~Vehicle();
 		Vehicle(double search_size, double max_step);
+		~Vehicle();
+
 		void set_limit(double search_size);
+		void set_limits(double xmin, double xmax, double ymin, double ymax);
 		void set_max_step(double max_step);
 		void set_xy();
 		void set_xy(double x, double y);

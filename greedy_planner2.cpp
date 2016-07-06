@@ -4,7 +4,11 @@ using std::endl;
 
 
 GreedyPlanner2::GreedyPlanner2(string paramfile, string logpath)
-	:MyPlanner(paramfile, logpath) {}
+	:MyPlanner(paramfile, logpath)
+{
+	_numcells_x = 0;
+	_numcells_y = 0;
+}
 
 int GreedyPlanner2::initialize()
 {
@@ -16,20 +20,40 @@ int GreedyPlanner2::initialize()
 	if (path == "error")
 		return -1;
 
-	/* check that the filter is of  the correct type */
-	if (this->filter->type != 0)
-	{
-		//planner_log << "Greedy2 expects a discrete filter." << endl;
-		fprintf(_plannerlog, "Greedy2 expects a discrete filter.\n");
-		fflush(_plannerlog);
-		return -1;
-	}
-	DF * f = static_cast<DF *>(this->filter);
-	_n = f->n;
-	_cellsize = f->cell_size;
+	determine_search_area();
 
-	fprintf(_plannerlog, "GreedyPlanner2 initialized.\n");
+	fprintf(_plannerlog, "GreedyPlanner2 initialized.\n###########\n");
 	fflush(_plannerlog);
+	return 0;
+}
+
+int GreedyPlanner2::determine_search_area()
+{
+	/* assigning cell size */
+	if (_uav._numcells_x == 0)
+	{
+		if (this->filter->type != 0)
+		{
+			fprintf(_plannerlog, "Greedy2: no discretization provided.\n");
+			fflush(_plannerlog);
+			return -1;
+		}
+		DF * f = static_cast<DF *>(this->filter);
+
+		_uav._numcells_x = f->n;
+		_uav._numcells_y = f->n;
+	}
+
+
+	_numcells_x = _uav._numcells_x;
+	_numcells_y = _uav._numcells_y;
+
+	_cellsize_x = (_uav._xmax - _uav._xmin) / _numcells_x;
+	_cellsize_y = (_uav._ymax - _uav._ymin) / _numcells_y;
+
+	_halfcell_x = _cellsize_x / 2.0;
+	_halfcell_y = _cellsize_y / 2.0;
+
 	return 0;
 }
 
@@ -56,19 +80,18 @@ Action GreedyPlanner2::get_action_slow()
 {
 	int xi, yi;
 	vector<double> xp;
-	double mi, best_mi, best_x, best_y, half_cell;
+	double mi, best_mi, best_x, best_y;
 	best_mi = -99999.0;
-	half_cell = _cellsize / 2;
 	xp.resize(3);
 	xp[2] = 0;
 
 
-	for (xi = 0; xi < _n; xi++)
+	for (xi = 0; xi < _numcells_x; xi++)
 	{
-		xp[0] = xi * _cellsize + half_cell;
-		for (yi = 0; yi < _n; yi++)
+		xp[0] = xi*_cellsize_x + _halfcell_x + _uav._xmin;
+		for (yi = 0; yi < _numcells_y; yi++)
 		{
-			xp[1] = yi * _cellsize + half_cell;
+			xp[1] = yi*_cellsize_y + _halfcell_y + _uav._ymin;
 			mi = filter->mutual_information(_uav, xp);
 			if (mi > best_mi)
 			{
@@ -95,17 +118,17 @@ Action GreedyPlanner2::get_action_fast()
 	best_mi = -999999.0;
 
 
-	for (xv = 0; xv < _n; xv++)
+	for (xv = 0; xv < _numcells_x; xv++)
 	{
-		for (yv = 0; yv < _n; yv++)
+		for (yv = 0; yv < _numcells_y; yv++)
 		{
 			//printf("xv, yv = %d,%d\n", xv, yv);
 			mi = filter->mutual_information(_uav, xv, yv);
 			if (mi > best_mi)
 			{
 				best_mi = mi;
-				best_x = xv*_cellsize;
-				best_y = yv*_cellsize;
+				best_x = xv*_cellsize_x;
+				best_y = yv*_cellsize_y;
 			}
 		}
 	}
@@ -139,19 +162,18 @@ Action GreedyPlanner2::get_action_faster_det()
 
 	int xi, yi;
 	vector<double> xp;
-	double mi, best_mi, best_x, best_y, half_cell;
-	best_mi = -99999.0;
-	half_cell = _cellsize / 2;
+	double mi, best_mi, best_x, best_y;
+	best_mi = -999999.0;
 	xp.resize(3);
 	xp[2] = 0;
 
-
-	for (xi = 0; xi < _n; xi++)
+	/* consider all possible vehicle locations */
+	for (xi = 0; xi < _numcells_x; xi++)
 	{
-		xp[0] = xi * _cellsize + half_cell;
-		for (yi = 0; yi < _n; yi++)
+		xp[0] = xi*_cellsize_x + _halfcell_x + _uav._xmin;
+		for (yi = 0; yi < _numcells_y; yi++)
 		{
-			xp[1] = yi * _cellsize + half_cell;
+			xp[1] = yi*_cellsize_y + _halfcell_y + _uav._ymin;
 			//mi = filter->mutual_information(_uav, xp);
 			//
 			// OK. we have a possible place to move to (xp)
@@ -160,7 +182,7 @@ Action GreedyPlanner2::get_action_faster_det()
 			yr = mu_y - xp[1];
 
 			// Compute Rt
-			if (xr*xr + yr*yr < 100.0)
+			if (xr*xr + yr*yr < 400.0)
 			{
 				Rt = 40.0;
 			}
@@ -220,19 +242,18 @@ Action GreedyPlanner2::get_action_faster_eig()
 
 	int xi, yi;
 	vector<double> xp;
-	double mi, best_mi, best_x, best_y, half_cell;
+	double mi, best_mi, best_x, best_y;
 	best_mi = -99999.0;
-	half_cell = _cellsize / 2;
 	xp.resize(3);
 	xp[2] = 0;
 
 
-	for (xi = 0; xi < _n; xi++)
+	for (xi = 0; xi < _numcells_x; xi++)
 	{
-		xp[0] = xi * _cellsize + half_cell;
-		for (yi = 0; yi < _n; yi++)
+		xp[0] = xi*_cellsize_x + _halfcell_x;
+		for (yi = 0; yi < _numcells_y; yi++)
 		{
-			xp[1] = yi * _cellsize + half_cell;
+			xp[1] = yi*_cellsize_y + _halfcell_y;
 			//mi = filter->mutual_information(_uav, xp);
 			//
 			// OK. we have a possible place to move to (xp)
@@ -241,7 +262,7 @@ Action GreedyPlanner2::get_action_faster_eig()
 			yr = mu_y - xp[1];
 
 			// Compute Rt
-			if (xr*xr + yr*yr < 100.0)
+			if (xr*xr + yr*yr < 400.0)
 			{
 				Rt = 40.0;
 			}

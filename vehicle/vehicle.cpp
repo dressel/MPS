@@ -2,6 +2,8 @@
 
 Vehicle::Vehicle()
 {
+	_numcells_x = 0;
+	_numcells_y = 0;
 }
 
 Vehicle::~Vehicle()
@@ -19,6 +21,8 @@ Vehicle::Vehicle(double ss, double ms)
 	this->limit = ss;
 	this->max_step = ms;
 	this->sensor = new BearingOnly();
+	_numcells_x = 0;
+	_numcells_y = 0;
 }
 
 // TODO: actually check the bounds here
@@ -79,6 +83,15 @@ void Vehicle::set_xy(double px, double py)
 void Vehicle::set_limit(double search_size)
 {
 	this->limit = search_size;
+	set_limits(0, search_size, 0, search_size);
+}
+
+void Vehicle::set_limits(double xmin, double xmax, double ymin, double ymax)
+{
+	_xmin = xmin;
+	_xmax = xmax;
+	_ymin = ymin;
+	_ymax = ymax;
 }
 
 void Vehicle::set_max_step(double ms)

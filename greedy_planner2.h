@@ -7,8 +7,12 @@ class GreedyPlanner2 : public MyPlanner
 {
 	public:
 
-		int _n;
-		double _cellsize;
+		int _numcells_x;		// cells per side
+		int _numcells_y;		// cells per side
+		double _cellsize_x;		// size of a cell
+		double _cellsize_y;		// size of a cell
+		double _halfcell_x;		// size of half a cell
+		double _halfcell_y;		// size of half a cell
 
 		GreedyPlanner2(string paramfile, string logfile);
 		/**
@@ -23,5 +27,6 @@ class GreedyPlanner2 : public MyPlanner
 		Action get_action_fast();
 		Action get_action_faster_det();
 		Action get_action_faster_eig();
+		int determine_search_area();
 };
 #endif
