@@ -13,12 +13,10 @@ GreedyPlanner2::GreedyPlanner2(string paramfile, string logpath)
 int GreedyPlanner2::initialize()
 {
 	/* Create the logging file */
-	if (start_log())
-		return -1;
+	if (start_log()) return -1;
 
 	string path = read_config(_param_file);
-	if (path == "error")
-		return -1;
+	if (path == "error") return -1;
 
 	determine_search_area();
 
