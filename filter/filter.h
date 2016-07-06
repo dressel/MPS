@@ -14,9 +14,14 @@ using std::ofstream;
 class Filter
 {
 	public:
-		int type;
 		virtual ~Filter() {};
 		virtual int update(Vehicle &x, double o) = 0;
+
+		/**
+		 * 0 = DF
+		 * 1 = PF
+		 */
+		int type;
 
 		/* For printing */
 		virtual void print_belief() = 0;
