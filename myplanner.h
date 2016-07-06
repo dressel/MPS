@@ -14,15 +14,19 @@ using std::stringstream;
 class MyPlanner : public Planner
 {
 	public:
+
+		/* constructors, destructor */
 		MyPlanner();
 		MyPlanner(string paramfile, string logpath);
 		~MyPlanner();
+
 		Vehicle _uav;
 		Filter *filter;
 		string _param_file;
 		string _log_path;
 		double _search_size;
 
+		/* required of any Planner subclass */
 		virtual int initialize() {};
 		Action action();
 
@@ -31,30 +35,41 @@ class MyPlanner : public Planner
 		FILE *_plannerlog;
 		int start_log();
 		string read_config(string paramfile);
-		string read_config2(string paramfile);
-		string read_config_safe(string paramfile);
-		void log_config();
 		int _policy_extra_1;
 
 		/**
-		 * action = d_north,d_east,d_yaw (in meters)
-		 * observation = o
+		 * functions that print the following:
+		 *   action = d_north,d_east,d_yaw (in meters)
+		 *   observation = o
 		 */
-		void print_action(vector<float> &a);
-		void print_obs(double o);
 		void print_action(Action a);
+		void print_obs(double o);
 
-		void update_belief();
+		/**
+		 * Each function has its individual get_action function
+		 * This function is called by MyPlanner's `action` function
+		 */
 		virtual Action get_action() {};
 
 
 	private:
+		/* Determines observation, updates belief, and prints them */
+		void update_belief();
+
+		/**
+		 * Uses the sensor type of the planner's vehicle to determine
+		 *  what constitutes an observation.
+		 */
 		double get_obs();
+
+		/* read lines of various types from config file and set fields */
 		int read_param_line(string line, string path);
 		int read_search_size_line(string line);
 		int read_sensor_line(string line, string path);
 		int read_filter_line(string line);
 		int read_policy_line(string line);
 
+		/* log our configuration choices */
+		void log_config();
 };
 #endif

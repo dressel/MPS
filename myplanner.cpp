@@ -41,12 +41,6 @@ void MyPlanner::print_action(Action a)
 	fflush(_plannerlog);
 }
 
-void MyPlanner::print_action(vector<float> &a)
-{
-	//planner_log << "COMMAND: (north,east,yaw) = " << a[0] << "," << a[1] << "," << a[2] << endl << endl;
-}
-
-
 /**
  *
  * Returns -1 (true) if failure, 0 otherwise.
@@ -93,32 +87,6 @@ double MyPlanner::get_obs()
 }
 
 
-// I know the following works, but we want to move away from this
-
-
-string MyPlanner::read_config_safe(string paramfile)
-{
-	/* get the path */
-	int num_chars = paramfile.find_last_of("/") + 1;
-	string path = paramfile.substr(0, num_chars);
-
-	_search_size = 100.0;
-	_uav.set_limit(_search_size);
-	_uav.set_xy();
-	_uav.heading = 0.0;
-	_uav.set_max_step(10.0);	
-	
-	// TODO: do this correctly
-	// the below seems to hang when I leave it be
-	//delete filter;
-	filter = new DF(_search_size, 41);
-
-	// the below seems to work.
-	_uav.sensor = new BearingOnly();
-
-	return path;
-}
-
 /**
  * Reads in a configuration file and creates the vehicle and filter
  * Should fail gracefully
@@ -151,7 +119,6 @@ string MyPlanner::read_config(string paramfile)
 			return "error";
 		}
 	}
-	//read_config_safe(paramfile);
 
 	/* close the stream and return the path of configuration files */
 	param_stream.close();
