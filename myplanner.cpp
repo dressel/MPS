@@ -156,6 +156,9 @@ int MyPlanner::read_param_line(string line, string path)
 
 	if (line.find("search_size") != string::npos)
 		return read_search_size_line(line);
+
+	if (line.find("vehicle") != string::npos)
+		return read_vehicle_line(line);
 	
 	if (line.find("sensor") != string::npos)
 		return read_sensor_line(line, path);
@@ -187,6 +190,22 @@ int MyPlanner::read_search_size_line(string line)
 	_uav.set_xy();
 	_uav.heading = 0.0;
 	_uav.set_max_step(10.0);	// TODO: do this correctly
+	return 0;
+}
+int MyPlanner::read_vehicle_line(string line)
+{
+	string sub;
+	stringstream ss(line);
+	getline(ss, sub, ',');
+	getline(ss, sub, ',');		// done twice to get second element
+
+	double x = stod(sub);
+	getline(ss, sub, ',');	
+	double y = stod(sub);
+	//printf("x = %.3f, y = %.3f\n", x, y);
+	_uav.set_xy(x,y);
+	//_uav.heading = 0.0;
+	//_uav.set_max_step(10.0);	// TODO: do this correctly
 	return 0;
 }
 int MyPlanner::read_sensor_line(string line, string path)

@@ -65,6 +65,7 @@ class MyPlanner : public Planner
 		/* read lines of various types from config file and set fields */
 		int read_param_line(string line, string path);
 		int read_search_size_line(string line);
+		int read_vehicle_line(string line);
 		int read_sensor_line(string line, string path);
 		int read_filter_line(string line);
 		int read_policy_line(string line);
