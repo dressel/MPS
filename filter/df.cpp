@@ -48,7 +48,7 @@ int DF::update(Vehicle &x, double o)
 	int num_cells = this->n;
 	double bp_sum = 0.0;
 	int theta_x, theta_y;
-	double tx, ty, temp;
+	double tx, ty;
 
 	for (theta_x = 0; theta_x < num_cells; theta_x++) 
 	{
@@ -214,12 +214,6 @@ double DF::O(int xr, int yr, int obs_bin, Sensor *s)
 
 double DF::O(int xr, int yr, int obs_bin, BearingOnly *bo)
 {
-	/*
-	double ang_deg = true_bearing(xr*cell_size, yr*cell_size);
-	pair<double, double> rbe = rel_bin_edges(ang_deg, obs_bin);
-	Normal d(0.0, bo->noise);
-	double prob = d.cdf(rbe.second) - d.cdf(rbe.first);
-	*/
 	return obs_probs[xr+n-1][yr+n-1][obs_bin];
 }
 
