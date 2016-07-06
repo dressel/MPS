@@ -44,7 +44,7 @@ void DF::reset()
 
 int DF::update(Vehicle &x, double o)
 {
-	int ob = this->obs2bin(o, x.sensor);
+	int ob = obs2bin(o, x.sensor);
 	int num_cells = this->n;
 	double bp_sum = 0.0;
 	int theta_x, theta_y;
