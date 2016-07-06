@@ -26,7 +26,7 @@ int GreedyPlanner2::initialize()
 	}
 	DF * f = static_cast<DF *>(this->filter);
 	_n = f->n;
-	_cell_size = f->cell_size;
+	_cellsize = f->cell_size;
 
 	fprintf(_plannerlog, "GreedyPlanner2 initialized.\n");
 	fflush(_plannerlog);
@@ -58,17 +58,17 @@ Action GreedyPlanner2::get_action_slow()
 	vector<double> xp;
 	double mi, best_mi, best_x, best_y, half_cell;
 	best_mi = -99999.0;
-	half_cell = _cell_size / 2;
+	half_cell = _cellsize / 2;
 	xp.resize(3);
 	xp[2] = 0;
 
 
 	for (xi = 0; xi < _n; xi++)
 	{
-		xp[0] = xi * _cell_size + half_cell;
+		xp[0] = xi * _cellsize + half_cell;
 		for (yi = 0; yi < _n; yi++)
 		{
-			xp[1] = yi * _cell_size + half_cell;
+			xp[1] = yi * _cellsize + half_cell;
 			mi = filter->mutual_information(_uav, xp);
 			if (mi > best_mi)
 			{
@@ -104,8 +104,8 @@ Action GreedyPlanner2::get_action_fast()
 			if (mi > best_mi)
 			{
 				best_mi = mi;
-				best_x = xv*_cell_size;
-				best_y = yv*_cell_size;
+				best_x = xv*_cellsize;
+				best_y = yv*_cellsize;
 			}
 		}
 	}
@@ -141,17 +141,17 @@ Action GreedyPlanner2::get_action_faster_det()
 	vector<double> xp;
 	double mi, best_mi, best_x, best_y, half_cell;
 	best_mi = -99999.0;
-	half_cell = _cell_size / 2;
+	half_cell = _cellsize / 2;
 	xp.resize(3);
 	xp[2] = 0;
 
 
 	for (xi = 0; xi < _n; xi++)
 	{
-		xp[0] = xi * _cell_size + half_cell;
+		xp[0] = xi * _cellsize + half_cell;
 		for (yi = 0; yi < _n; yi++)
 		{
-			xp[1] = yi * _cell_size + half_cell;
+			xp[1] = yi * _cellsize + half_cell;
 			//mi = filter->mutual_information(_uav, xp);
 			//
 			// OK. we have a possible place to move to (xp)
@@ -222,17 +222,17 @@ Action GreedyPlanner2::get_action_faster_eig()
 	vector<double> xp;
 	double mi, best_mi, best_x, best_y, half_cell;
 	best_mi = -99999.0;
-	half_cell = _cell_size / 2;
+	half_cell = _cellsize / 2;
 	xp.resize(3);
 	xp[2] = 0;
 
 
 	for (xi = 0; xi < _n; xi++)
 	{
-		xp[0] = xi * _cell_size + half_cell;
+		xp[0] = xi * _cellsize + half_cell;
 		for (yi = 0; yi < _n; yi++)
 		{
-			xp[1] = yi * _cell_size + half_cell;
+			xp[1] = yi * _cellsize + half_cell;
 			//mi = filter->mutual_information(_uav, xp);
 			//
 			// OK. we have a possible place to move to (xp)

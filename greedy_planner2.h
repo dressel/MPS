@@ -8,7 +8,7 @@ class GreedyPlanner2 : public MyPlanner
 	public:
 
 		int _n;
-		double _cell_size;
+		double _cellsize;
 
 		GreedyPlanner2(string paramfile, string logfile);
 		/**
