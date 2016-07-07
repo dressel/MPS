@@ -7,16 +7,11 @@ class GreedyPlanner : public MyPlanner
 {
 	public:
 
-		/**
-		 * Constructor
-		 */
+		/* constructor */
 		GreedyPlanner(string paramfile, string logfile);
 
-		/**
-		 * Returns true if an error occurred.
-		 */
+		/* Returns true if an error occurred */
 		int initialize();
-
 		Action get_action();
 
 	private:

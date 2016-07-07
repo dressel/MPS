@@ -22,7 +22,7 @@ int CirclePlanner::initialize()
 	this->last[0] = 0.0;
 	this->last[1] = 0.0;
 	
-	fprintf(_plannerlog, "CirclePlanner initialized.\n");
+	fprintf(_plannerlog, "CirclePlanner initialized.\n###########\n");
 	return 0;
 }
 
@@ -51,3 +51,9 @@ Action CirclePlanner::get_action()
 
 	return action;
 }
+
+/*
+Action CirclePlanner::get_action()
+{
+}
+*/

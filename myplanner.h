@@ -35,6 +35,7 @@ class MyPlanner : public Planner
 		FILE *_plannerlog;
 		int start_log();
 		string read_config(string paramfile);
+		int _policy_extra_0;
 		int _policy_extra_1;
 
 		/**
@@ -48,8 +49,10 @@ class MyPlanner : public Planner
 		/**
 		 * Each function has its individual get_action function
 		 * This function is called by MyPlanner's `action` function
+		 * get_action_no_obs defaults to get_action
 		 */
 		virtual Action get_action() {};
+		virtual Action get_action_no_obs() {return get_action();};
 
 
 	private:

@@ -129,9 +129,9 @@ void DF::print_belief(FILE *outfile)
 	{
 		for (x = 0; x < (n-1); x++)
 		{
-			fprintf(outfile, "%.2f,", b[x][y]);
+			fprintf(outfile, "%.4f,", b[x][y]);
 		}
-		fprintf(outfile, "%.2f\n", b[n-1][y]);
+		fprintf(outfile, "%.4f\n", b[n-1][y]);
 	}
 }
 

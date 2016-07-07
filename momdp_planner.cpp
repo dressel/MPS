@@ -26,13 +26,11 @@ MOMDPPlanner::MOMDPPlanner(string paramfile, string logpath)
 // Returns true if ok, false if bad
 int MOMDPPlanner::initialize()
 {
-	/* Create the logging file */
-	if (start_log())
-		return -1;
+	/* create the logging file */
+	if (start_log()) return -1;
 
 	string path = read_config(_param_file);
-	if (path == "error")
-		return -1;
+	if (path == "error") return -1;
 
 	/* check that the filter is of  the correct type */
 	if (this->filter->type != 0)

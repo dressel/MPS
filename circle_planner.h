@@ -6,7 +6,11 @@
 class CirclePlanner : public MyPlanner
 {
 	public:
+
+		/* constructor */
 		CirclePlanner(string paramfile, string logpath);
+
+		/* required functions for MyPlanner subclass */
 		int initialize();
 		Action get_action();
 

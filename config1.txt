@@ -1,6 +1,15 @@
 # First configuration
 # Assumes a bearing only sensor
 search_size,100
-sensor,bo,13,0
-filter,df,41,1
-policy,2
+#vehicle,xy,50,-50,limits,0,100,-100,0,cells,11,11, max
+#vehicle,xy,50,-50,limits,0,100,-100,0,cells,11,11,max_step,32
+sensor,bo,13
+filter,df,21,0
+# policy extras:
+#  policy_extra_0
+#   0 = no special action for no observation
+#   1 = special action for a no observation
+#  policy_extra_1
+#   1 = determinant
+#   2 = eigenvalue
+policy,0,2

@@ -23,8 +23,19 @@ MyPlanner::MyPlanner(string paramfile, string logpath)
 
 Action MyPlanner::action()
 {
-	update_belief();
-	Action a = get_action();
+	Action a;
+	int no_obs = 0;
+	if (no_obs)
+	{
+		fprintf(_plannerlog, "NO VALID OBS\n");
+		fflush(_plannerlog);
+		a = get_action_no_obs();
+	}
+	else
+	{
+		update_belief();
+		a = get_action();
+	}
 	print_action(a);
 	_uav.move(a.east, a.north, a.yaw);
 	return a;
@@ -93,6 +104,7 @@ double MyPlanner::get_obs()
  */
 string MyPlanner::read_config(string paramfile)
 {
+	_policy_extra_0 = 0;
 	_policy_extra_1 = 0;
 	ifstream param_stream;
 	string line;
@@ -139,6 +151,10 @@ void MyPlanner::log_config()
 	fprintf(_plannerlog, "\t\txmax = %.1f\n", _uav._xmax);
 	fprintf(_plannerlog, "\t\tymin = %.1f\n", _uav._ymin);
 	fprintf(_plannerlog, "\t\tymax = %.1f\n", _uav._ymax);
+	fprintf(_plannerlog, "\t\tnum cells x = %d\n", _uav._numcells_x);
+	fprintf(_plannerlog, "\t\tnum cells y = %d\n", _uav._numcells_y);
+	fprintf(_plannerlog, "\t\tmax_step = %.1f\n", _uav.max_step);
+	fprintf(_plannerlog, "\t\tx0,y0 = %.1f,%.1f\n", _uav.x, _uav.y);
 	
 	// determine filter type
 	fprintf(_plannerlog, "\tfilter type = %d\n", filter->type);
@@ -147,6 +163,9 @@ void MyPlanner::log_config()
 		DF* df = static_cast<DF*>(filter);
 		fprintf(_plannerlog, "\t\tn = %d\n", df->n);
 	}
+
+	// policy extras
+	fprintf(_plannerlog, "policy extras = %d,%d\n", _policy_extra_0, _policy_extra_1);
 
 	fflush(_plannerlog);
 	return;
@@ -185,7 +204,16 @@ int MyPlanner::read_param_line(string line, string path)
 int MyPlanner::read_policy_line(string line)
 {
 	int ind = line.find_last_of(",")+1;
-	_policy_extra_1 = stoi(line.substr(ind, line.length()-ind));
+
+	string sub;
+	stringstream ss(line);
+	getline(ss, sub, ','); // getting rid of first element
+	getline(ss, sub, ',');
+
+	_policy_extra_0 = stoi(sub);
+	getline(ss, sub, ',');
+	_policy_extra_1 = stoi(sub);
+
 	return 0;
 }
 
@@ -216,7 +244,7 @@ int MyPlanner::read_vehicle_line(string line)
 			getline(ss, sub, ',');	
 			double y = stod(sub);
 			_uav.set_xy(x,y);
-			printf("x = %.3f, y = %.3f\n", x,y);
+			//printf("x = %.3f, y = %.3f\n", x,y);
 		}
 		if (sub == "limits")
 		{
@@ -237,6 +265,11 @@ int MyPlanner::read_vehicle_line(string line)
 			getline(ss, sub, ',');
 			_uav._numcells_y = stoi(sub);
 		}
+		if (sub == "max_step")
+		{
+			getline(ss, sub, ',');
+			_uav.max_step = stod(sub);
+		}
 	}
 
 	return 0;
@@ -250,9 +283,15 @@ int MyPlanner::read_sensor_line(string line, string path)
 	getline(ss, sub, ',');		// done twice to get second element
 	if (sub == "bo")
 	{
-		_uav.sensor = new BearingOnly(13.0);
+		/* get the noise */
+		getline(ss, sub, ',');
+		double noise_sigma = stod(sub);
+
+		/* create the sensor and report */
+		_uav.sensor = new BearingOnly(noise_sigma);
 		fprintf(_plannerlog, "New BearingOnly sensor created.\n");
 		fflush(_plannerlog);
+
 		return 0;
 	}
 	else if (sub == "do")
