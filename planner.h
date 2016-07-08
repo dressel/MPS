@@ -178,6 +178,10 @@ public:
 	/* don't make protected, I access this directly (ugly, sorry) LD */
 	vector<double> _mu_Sigma;
 
+	/* useful for testing */
+	void set_bearing_max3(double bm3);
+
+
 	/**
 	 * constructor
 	 */

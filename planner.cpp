@@ -97,3 +97,8 @@ void Planner::update_observations(const vector<double> headings, const vector<do
 	// get the max signal strength for this set
 	_max_rssi = get_max_rssi(_gains);
 }
+
+void Planner::set_bearing_max3(double bm3)
+{
+	_bearing_max3 = bm3;
+}

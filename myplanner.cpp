@@ -89,7 +89,7 @@ double MyPlanner::get_obs()
 	int stype = _uav.sensor->type();
 	if (stype == 0)
 	{
-		o = _bearing_max;
+		o = _bearing_max3;
 	}
 	else if (stype == 1)
 	{
