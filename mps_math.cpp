@@ -73,6 +73,19 @@ double determinant(double a, double b, double c, double d)
 	return a*d - b*c;
 }
 
+/**
+ * Solving for eigenvalues requires solving:
+ *   det(A - sI) = 0
+ * This leads to the equation
+ *   (a-s)(d-s) - bc = 0
+ *   ad - as - ds + s^2 - bc = 0
+ *   s^2 - (a+d)s + (ad-bc) = 0
+ * We can use the quadratic equation to solve for this:
+ *   A = 1
+ *   B = -(a+d)
+ *   C = ad-bc
+ * We return the solution that is smallest.
+ */
 double smallest_eig(double a, double b, double c, double d)
 {
 	double B = -1.0 * (d+a);
@@ -80,8 +93,5 @@ double smallest_eig(double a, double b, double c, double d)
 	double a1 = (-B + sqrt(B*B - 4*C)) / 2.0;
 	double a2 = (-B - sqrt(B*B - 4*C)) / 2.0;
 
-	if (a1 < a2)
-		return a1;
-
-	return a2;
+	return (a1 < a2) ? a1 : a2;
 }

@@ -16,7 +16,10 @@ double fit_180(double angle);
 
 /*
  * Matrix is of the form
- * [a b; c d]
+ *   [a b; c d]
+ * as in,
+ *   |a b|
+ *   |c d|
  */
 double determinant(double a, double b, double c, double d);
 double smallest_eig(double a, double b, double c, double d);
