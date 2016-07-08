@@ -129,9 +129,9 @@ void DF::print_belief(FILE *outfile)
 	{
 		for (x = 0; x < (n-1); x++)
 		{
-			fprintf(outfile, "%.4f,", b[x][y]);
+			fprintf(outfile, "%.5f,", b[x][y]);
 		}
-		fprintf(outfile, "%.4f\n", b[n-1][y]);
+		fprintf(outfile, "%.5f\n", b[n-1][y]);
 	}
 }
 
@@ -172,9 +172,14 @@ double DF::O(double px, double py, double tx, double ty, int obs_bin, BearingOnl
 {
 	double ang_deg = true_bearing(px, py, tx, ty);
 
+
 	pair<double, double> rbe = rel_bin_edges(ang_deg, obs_bin);
 	//Normal d(0.0, bo->noise_sigma);
 	//double prob = d.cdf(rbe.second) - d.cdf(rbe.first);
+	//double s = bo->noise_sigma;
+	double xr = tx - px;
+	double yr = ty - py;
+	//double s = (xr*xr + yr*yr < 900) ? 50.0 : bo->noise_sigma;
 	double s = bo->noise_sigma;
 	double prob = cdf(0.0, s, rbe.second) - cdf(0.0, s, rbe.first);
 
