@@ -195,11 +195,11 @@ Action GreedyPlanner2::get_action_fast()
 Action GreedyPlanner2::get_action_faster( double (*eval_func)(double,double,double,double) )
 {
 	vector<double> muSigma = filter->meancov();
-	double den = 1.0 / (muSigma[2]*muSigma[5] - muSigma[3]*muSigma[4]);
+	double den = (muSigma[2]*muSigma[5] - muSigma[3]*muSigma[4]);
 	double a1 = muSigma[5] / den;
 	double b1 = -muSigma[3] / den;
 	double c1 = -muSigma[4] / den;
-	double d1 = muSigma[1] / den;
+	double d1 = muSigma[2] / den;
 	double mu_x = muSigma[0];
 	double mu_y = muSigma[1];
 
@@ -248,9 +248,11 @@ Action GreedyPlanner2::get_action_faster( double (*eval_func)(double,double,doub
 			sum_d = d1 + q*(xr*xr);
 
 			sum_det = eval_func(sum_a, sum_b, sum_c, sum_d);
+			//printf("sum_det = %.3f\n", sum_det);
 
 			if (sum_det > best_det)
 			{
+				//printf("sum_det = %.3f\n", sum_det);
 				best_det = sum_det;
 				best_x = xp[0];
 				best_y = xp[1];
