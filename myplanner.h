@@ -45,6 +45,7 @@ class MyPlanner : public Planner
 		 */
 		void print_action(Action a);
 		void print_obs(double o);
+		void print_meancov();
 
 		/**
 		 * Each function has its individual get_action function

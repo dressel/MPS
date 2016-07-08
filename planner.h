@@ -173,6 +173,10 @@ public:
 class Planner {
 
 public:
+	
+	/* a 6-length vector containing mean and covariance estimate */
+	/* don't make protected, I access this directly (ugly, sorry) LD */
+	vector<double> _mu_Sigma;
 
 	/**
 	 * constructor

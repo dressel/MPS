@@ -25,6 +25,8 @@ _max_rssi(0)
 	_gains.clear();
 	_omni_gains.clear();
 	_norm_gains.clear();
+	_mu_Sigma.resize(6);
+	std::fill(_mu_Sigma.begin(), _mu_Sigma.end(), 0.);
 }
 
 

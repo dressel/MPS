@@ -46,6 +46,12 @@ void MyPlanner::print_obs(double o)
 	fprintf(_plannerlog, "observation = %.2f\n", o);
 	fflush(_plannerlog);
 }
+void MyPlanner::print_meancov()
+{
+	fprintf(_plannerlog, "mean (x,y) = %.1f,%.1f\n", _mu_Sigma[0], _mu_Sigma[1]);
+	fprintf(_plannerlog, "cov (x,y) (a,b,c,d) = %.1f,%.1f,%.1f,%.1f\n", _mu_Sigma[2], _mu_Sigma[3], _mu_Sigma[4], _mu_Sigma[5]);
+	fflush(_plannerlog);
+}
 void MyPlanner::print_action(Action a)
 {
 	fprintf(_plannerlog, "action (north,east,yaw) = %.2f,%.2f,%.2f\n", a.north, a.east, a.yaw);
@@ -354,4 +360,12 @@ void MyPlanner::update_belief()
 	filter->update(_uav, o);
 	fprintf(_plannerlog, "belief\n");
 	filter->print_belief(_plannerlog);
+	vector<double> mc = filter->meancov();
+	_mu_Sigma[0] = mc[0];
+	_mu_Sigma[1] = mc[1];
+	_mu_Sigma[2] = mc[2];
+	_mu_Sigma[3] = mc[3];
+	_mu_Sigma[4] = mc[4];
+	_mu_Sigma[5] = mc[5];
+	print_meancov();
 }
