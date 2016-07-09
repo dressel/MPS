@@ -24,8 +24,7 @@ MyPlanner::MyPlanner(string paramfile, string logpath)
 Action MyPlanner::action()
 {
 	Action a;
-	int no_obs = 0;
-	if (no_obs)
+	if (isnan(_bearing_max))
 	{
 		fprintf(_plannerlog, "NO VALID OBS\n");
 		fflush(_plannerlog);
@@ -89,7 +88,7 @@ double MyPlanner::get_obs()
 	int stype = _uav.sensor->type();
 	if (stype == 0)
 	{
-		o = _bearing_max3;
+		o = _bearing_max;
 	}
 	else if (stype == 1)
 	{
