@@ -179,6 +179,7 @@ public:
 	vector<double> _mu_Sigma;
 
 	/* useful for testing */
+	void set_bearing_max(double bm);
 	void set_bearing_max3(double bm3);
 
 

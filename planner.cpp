@@ -98,6 +98,10 @@ void Planner::update_observations(const vector<double> headings, const vector<do
 	_max_rssi = get_max_rssi(_gains);
 }
 
+void Planner::set_bearing_max(double bm)
+{
+	_bearing_max = bm;
+}
 void Planner::set_bearing_max3(double bm3)
 {
 	_bearing_max3 = bm3;
