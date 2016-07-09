@@ -54,17 +54,20 @@ int GreedyPlanner2::initialize_non_obs_actions(string non_obs_path)
 	{
 		stringstream ss(line);
 
-		// file shall be written in north, east, yaw commands
-		non_obs_actions.resize(current_size + 1);
-		non_obs_actions[current_size].resize(3);
-		getline(ss, sub, ',');
-		non_obs_actions[current_size][0] = stod(sub);
-		getline(ss, sub, ',');
-		non_obs_actions[current_size][1] = stod(sub);
-		getline(ss, sub, ',');
-		non_obs_actions[current_size][2] = stod(sub);
+		if (line.substr(0,1) != "#")	// line is not a comment
+		{
+			// file shall be written in north, east, yaw commands
+			non_obs_actions.resize(current_size + 1);
+			non_obs_actions[current_size].resize(3);
+			getline(ss, sub, ',');
+			non_obs_actions[current_size][0] = stod(sub);
+			getline(ss, sub, ',');
+			non_obs_actions[current_size][1] = stod(sub);
+			getline(ss, sub, ',');
+			non_obs_actions[current_size][2] = stod(sub);
 
-		current_size += 1;
+			current_size += 1;
+		}
 	}
 
 	return 0;
